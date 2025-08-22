@@ -1,6 +1,26 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
-import { Id } from "./_generated/dataModel";
+
+// Helper function to get Convex user ID from Clerk authentication
+async function getCurrentConvexUserId(ctx: any) {
+  const identity = await ctx.auth.getUserIdentity();
+  if (!identity) {
+    throw new Error("User not authenticated");
+  }
+
+  const user = await ctx.db
+    .query("users")
+    .withIndex("by_email", (q) => q.eq("email", identity.email!))
+    .first();
+
+  if (!user) {
+    throw new Error(
+      "User not found in database. Please ensure user sync is working."
+    );
+  }
+
+  return user._id;
+}
 
 // Utility function to generate slug from title
 const generateSlug = (title: string): string => {
@@ -38,8 +58,8 @@ export const createBlogPost = mutation({
     metaDescription: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    // For now, we'll use a default user ID. In a real app, you'd get this from authentication
-    const defaultUserId = "jd79sb8nkpq0cnty86h8cvtt8x7p4vx6" as Id<"users">;
+    // Get the Convex user ID for the authenticated user
+    const authorId = await getCurrentConvexUserId(ctx);
 
     const slug = generateSlug(args.title);
     const readTime = calculateReadTime(args.content);
@@ -68,7 +88,7 @@ export const createBlogPost = mutation({
       content: args.content,
       excerpt: args.excerpt,
       slug: finalSlug,
-      authorId: defaultUserId,
+      authorId: authorId,
       featuredImageId: args.featuredImageId,
       featuredImageUrl,
       category: args.category,
