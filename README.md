@@ -13,7 +13,7 @@ Password Recovery
 
 2. Donation Features
 
-One-Time and Recurring Donations
+One Time and Recurring Donations
 – Users can choose between one-time or recurring (monthly/quarterly/annually) donations
 
 Donation Amount Options
