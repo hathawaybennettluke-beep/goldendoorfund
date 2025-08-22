@@ -1,4 +1,5 @@
 import { Heart, Shield, Users, Globe, Target, Award } from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Stats } from "@/components/Stats";
 
@@ -71,10 +72,10 @@ export default function AboutPage() {
               About DonateNow
             </h1>
             <p className="text-xl text-muted-foreground mb-8">
-              We're on a mission to make charitable giving simple, transparent,
-              and impactful. Since 2020, we've helped thousands of donors
-              support causes they care about while ensuring every contribution
-              creates real, measurable change.
+              We&apos;re on a mission to make charitable giving simple,
+              transparent, and impactful. Since 2020, we&apos;ve helped
+              thousands of donors support causes they care about while ensuring
+              every contribution creates real, measurable change.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" asChild>
@@ -203,8 +204,8 @@ export default function AboutPage() {
               Meet Our Team
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              We're a diverse group of professionals united by our passion for
-              creating positive change and making charitable giving more
+              We&apos;re a diverse group of professionals united by our passion
+              for creating positive change and making charitable giving more
               accessible to everyone.
             </p>
           </div>
@@ -242,7 +243,7 @@ export default function AboutPage() {
                 <a href="/campaigns">Browse Campaigns</a>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <a href="/sign-up">Create Account</a>
+                <Link href="/sign-up">Create Account</Link>
               </Button>
             </div>
           </div>

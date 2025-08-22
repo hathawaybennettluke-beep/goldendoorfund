@@ -22,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import Link from "next/link";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -95,7 +96,7 @@ export default function ContactPage() {
               Contact Us
             </h1>
             <p className="text-xl text-muted-foreground mb-8">
-              We're here to help you make a difference. Whether you have
+              We&apos;re here to help you make a difference. Whether you have
               questions about donating, need technical support, or want to
               partner with us, our team is ready to assist.
             </p>
@@ -148,9 +149,9 @@ export default function ContactPage() {
             <div>
               <h2 className="text-3xl font-bold mb-6">Send Us a Message</h2>
               <p className="text-muted-foreground mb-8">
-                Fill out the form below and we'll get back to you as soon as
-                possible. For urgent matters, please use our phone or live chat
-                support.
+                Fill out the form below and we&apos;ll get back to you as soon
+                as possible. For urgent matters, please use our phone or live
+                chat support.
               </p>
 
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -354,10 +355,10 @@ export default function ContactPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" asChild>
-                <a href="/#faq">View FAQ</a>
+                <Link href="/#faq">View FAQ</Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <a href="/help">Help Center</a>
+                <Link href="/help">Help Center</Link>
               </Button>
             </div>
           </div>
