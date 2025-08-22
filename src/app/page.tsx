@@ -92,15 +92,15 @@ export default function Home() {
         />
       </div>
 
-      <div className="px-10">
-        <CampaignShowcase />
-      </div>
-
       <InvertedSection>
         <div className="px-10">
-          <PaymentFeatures />
+          <CampaignShowcase />
         </div>
       </InvertedSection>
+
+      <div className="px-10">
+        <PaymentFeatures />
+      </div>
 
       <InvertedSection>
         <div className="px-10">

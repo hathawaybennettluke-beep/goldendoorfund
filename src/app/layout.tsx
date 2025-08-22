@@ -5,6 +5,17 @@ import ConvexClientProvider from "@/providers/ConvexClientProvider";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Navbar } from "@/components/Navbar";
+import { UserSyncProvider } from "@/components/UserSyncProvider";
+import { UserSyncStatus } from "@/components/UserSyncStatus";
+import {
+  Target,
+  AlertTriangle,
+  BookOpen,
+  Heart,
+  Building,
+  Shield,
+  BarChart3,
+} from "lucide-react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,100 +44,105 @@ export default function RootLayout({
       >
         <ClerkProvider>
           <ConvexClientProvider>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="dark"
-              disableTransitionOnChange
-            >
-              <div className="px-10">
-                <Navbar
-                  logo={{
-                    url: "/",
-                    src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/logos/shadcnblockscom-icon.svg",
-                    alt: "DonateNow Logo",
-                    title: "DonateNow",
-                  }}
-                  menu={[
-                    { title: "Home", url: "/" },
-                    {
-                      title: "Campaigns",
-                      url: "/campaigns",
-                      items: [
-                        {
-                          title: "Active Campaigns",
-                          description:
-                            "Browse and support ongoing donation campaigns",
-                          icon: "🎯",
-                          url: "/campaigns/active",
-                        },
-                        {
-                          title: "Emergency Relief",
-                          description:
-                            "Urgent campaigns needing immediate support",
-                          icon: "🚨",
-                          url: "/campaigns/emergency",
-                        },
-                        {
-                          title: "Education",
-                          description:
-                            "Support educational initiatives worldwide",
-                          icon: "📚",
-                          url: "/campaigns/education",
-                        },
-                        {
-                          title: "Healthcare",
-                          description:
-                            "Medical campaigns and health initiatives",
-                          icon: "🏥",
-                          url: "/campaigns/healthcare",
-                        },
-                      ],
-                    },
-                    {
-                      title: "How It Works",
-                      url: "/how-it-works",
-                      items: [
-                        {
-                          title: "For Donors",
-                          description:
-                            "Learn how to make secure donations and track impact",
-                          icon: "💝",
-                          url: "/donors",
-                        },
-                        {
-                          title: "For Organizations",
-                          description:
-                            "Create and manage fundraising campaigns",
-                          icon: "🏢",
-                          url: "/organizations",
-                        },
-                        {
-                          title: "Payment Security",
-                          description:
-                            "Our secure payment processing and data protection",
-                          icon: "🔒",
-                          url: "/security",
-                        },
-                        {
-                          title: "Impact Tracking",
-                          description:
-                            "See how your donations make a real difference",
-                          icon: "📊",
-                          url: "/impact",
-                        },
-                      ],
-                    },
-                    { title: "About Us", url: "/about" },
-                    { title: "Contact", url: "/contact" },
-                  ]}
-                  auth={{
-                    login: { title: "Sign In", url: "/sign-in" },
-                    signup: { title: "Get Started", url: "/sign-up" },
-                  }}
-                />
-              </div>
-              {children}
-            </ThemeProvider>
+            <UserSyncProvider>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="light"
+                forcedTheme="light"
+                disableTransitionOnChange
+              >
+                <div className="px-10 relative z-[1000]">
+                  <Navbar
+                    logo={{
+                      url: "/",
+                      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/logos/shadcnblockscom-icon.svg",
+                      alt: "DonateNow Logo",
+                      title: "DonateNow",
+                    }}
+                    menu={[
+                      { title: "Home", url: "/" },
+                      {
+                        title: "Campaigns",
+                        url: "/campaigns",
+                        items: [
+                          {
+                            title: "Active Campaigns",
+                            description:
+                              "Browse and support ongoing donation campaigns",
+                            icon: <Target className="h-5 w-5" />,
+                            url: "/campaigns/active",
+                          },
+                          {
+                            title: "Emergency Relief",
+                            description:
+                              "Urgent campaigns needing immediate support",
+                            icon: <AlertTriangle className="h-5 w-5" />,
+                            url: "/campaigns/emergency",
+                          },
+                          {
+                            title: "Education",
+                            description:
+                              "Support educational initiatives worldwide",
+                            icon: <BookOpen className="h-5 w-5" />,
+                            url: "/campaigns/education",
+                          },
+                          {
+                            title: "Healthcare",
+                            description:
+                              "Medical campaigns and health initiatives",
+                            icon: <Heart className="h-5 w-5" />,
+                            url: "/campaigns/healthcare",
+                          },
+                        ],
+                      },
+                      {
+                        title: "How It Works",
+                        url: "/how-it-works",
+                        items: [
+                          {
+                            title: "For Donors",
+                            description:
+                              "Learn how to make secure donations and track impact",
+                            icon: <Heart className="h-5 w-5" />,
+                            url: "/donors",
+                          },
+                          {
+                            title: "For Organizations",
+                            description:
+                              "Create and manage fundraising campaigns",
+                            icon: <Building className="h-5 w-5" />,
+                            url: "/organizations",
+                          },
+                          {
+                            title: "Payment Security",
+                            description:
+                              "Our secure payment processing and data protection",
+                            icon: <Shield className="h-5 w-5" />,
+                            url: "/security",
+                          },
+                          {
+                            title: "Impact Tracking",
+                            description:
+                              "See how your donations make a real difference",
+                            icon: <BarChart3 className="h-5 w-5" />,
+                            url: "/impact",
+                          },
+                        ],
+                      },
+                      { title: "Blog", url: "/blog" },
+                      { title: "About Us", url: "/about" },
+                      { title: "Contact", url: "/contact" },
+                    ]}
+                    auth={{
+                      login: { title: "Sign In", url: "/sign-in" },
+                      signup: { title: "Get Started", url: "/sign-up" },
+                    }}
+                  />
+                </div>
+                {children}
+                {/* <UserSyncStatus /> */}
+              </ThemeProvider>
+            </UserSyncProvider>
           </ConvexClientProvider>
         </ClerkProvider>
       </body>
