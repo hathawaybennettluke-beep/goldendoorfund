@@ -2,7 +2,7 @@
 
 User Registration and Login
 – Support for donor and admin accounts
-– Social login (Google, Facebook, etc.)
+– Social login (Google, Facebook, etc)
 
 User Profile Management
 – Update personal details
