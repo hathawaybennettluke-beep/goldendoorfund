@@ -21,6 +21,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 
 // Mock data - in a real app, this would come from your database
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockCampaignDetails: { [key: string]: any } = {
   "1": {
     id: "1",
@@ -110,7 +111,7 @@ export default function CampaignDetailPage() {
       <div className="flex flex-col items-center justify-center min-h-screen">
         <h1 className="text-2xl font-bold mb-4">Campaign Not Found</h1>
         <p className="text-muted-foreground mb-8">
-          The campaign you're looking for doesn't exist.
+          The campaign you&apos;re looking for doesn&apos;t exist.
         </p>
         <Link href="/campaigns">
           <Button>Back to Campaigns</Button>
@@ -296,6 +297,7 @@ export default function CampaignDetailPage() {
               <div className="mb-8">
                 <h2 className="text-2xl font-bold mb-6">Updates</h2>
                 <div className="space-y-6">
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                   {campaign.updates.map((update: any) => (
                     <div key={update.id} className="border rounded-lg p-6">
                       <div className="flex items-center gap-2 mb-3">
@@ -412,6 +414,7 @@ export default function CampaignDetailPage() {
                   </h3>
                   <div className="space-y-3">
                     {campaign.recentDonations.map(
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
                       (donation: any, index: number) => (
                         <div
                           key={index}

@@ -43,7 +43,8 @@ export default function BlogPostPage() {
         <div className="max-w-2xl mx-auto text-center">
           <h1 className="text-4xl font-bold mb-4">Post Not Found</h1>
           <p className="text-muted-foreground mb-8">
-            The blog post you're looking for doesn't exist or has been removed.
+            The blog post you&apos;re looking for doesn&apos;t exist or has been
+            removed.
           </p>
           <Button asChild>
             <Link href="/blog">

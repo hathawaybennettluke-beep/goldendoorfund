@@ -189,7 +189,10 @@ export default function EditBlogPost() {
     loadPost();
   }, [params.id]);
 
-  const handleInputChange = (field: string, value: any) => {
+  const handleInputChange = (
+    field: string,
+    value: string | number | boolean | string[]
+  ) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,

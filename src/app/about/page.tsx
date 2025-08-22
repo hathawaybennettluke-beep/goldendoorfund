@@ -79,10 +79,10 @@ export default function AboutPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" asChild>
-                <a href="/campaigns">View Our Impact</a>
+                <Link href="/campaigns">View Our Impact</Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <a href="/contact">Get In Touch</a>
+                <Link href="/contact">Get In Touch</Link>
               </Button>
             </div>
           </div>
@@ -240,7 +240,7 @@ export default function AboutPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" asChild>
-                <a href="/campaigns">Browse Campaigns</a>
+                <Link href="/campaigns">Browse Campaigns</Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
                 <Link href="/sign-up">Create Account</Link>
