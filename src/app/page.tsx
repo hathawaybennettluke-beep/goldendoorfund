@@ -1,103 +1,201 @@
-import Image from "next/image";
+"use client";
+import { Blog7 } from "@/components/BlogTeaser";
+import { CampaignShowcase } from "@/components/CampaignShowcase";
+import { Community } from "@/components/Community";
+import { Cta } from "@/components/CTA";
+import { FAQ } from "@/components/FAQ";
+import { Footer } from "@/components/Footer";
+import { Gallery } from "@/components/Gallery";
+import { Hero } from "@/components/Hero";
+import { InvertedSection } from "@/components/InvertedTheme";
+import { PaymentFeatures } from "@/components/PaymentFeatures";
+import { Stats } from "@/components/Stats";
 
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className={`flex flex-col`}>
+      <InvertedSection>
+        <div className="px-10 py-10">
+          <Hero
+            heading="Make a Difference with Every Donation"
+            description="Join thousands of donors making a positive impact worldwide. Support causes you care about with secure, transparent donations that create real change in communities."
+            buttons={{
+              primary: {
+                text: "Start Donating",
+                url: "/donate",
+              },
+              secondary: {
+                text: "View Campaigns",
+                url: "/campaigns",
+              },
+            }}
+            reviews={{
+              count: 15000,
+              rating: 4.9,
+              avatars: [
+                {
+                  src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-1.webp",
+                  alt: "Donor 1",
+                },
+                {
+                  src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-2.webp",
+                  alt: "Donor 2",
+                },
+                {
+                  src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-3.webp",
+                  alt: "Donor 3",
+                },
+                {
+                  src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-4.webp",
+                  alt: "Donor 4",
+                },
+                {
+                  src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-5.webp",
+                  alt: "Donor 5",
+                },
+              ],
+            }}
+          />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+      </InvertedSection>
+
+      <div className="px-10">
+        <Stats
+          heading="Our Impact in Numbers"
+          description="Transparent reporting on how your donations create meaningful change"
+          link={{
+            text: "View detailed impact report",
+            url: "/impact-report",
+          }}
+          stats={[
+            {
+              id: "total-raised",
+              value: "$2.8M+",
+              label: "total funds raised for causes worldwide",
+            },
+            {
+              id: "active-donors",
+              value: "15,000+",
+              label: "active donors supporting campaigns",
+            },
+            {
+              id: "campaigns-funded",
+              value: "450+",
+              label: "successful campaigns completed",
+            },
+            {
+              id: "success-rate",
+              value: "98.5%",
+              label: "of donations reach their intended recipients",
+            },
+          ]}
+        />
+      </div>
+
+      <div className="px-10">
+        <CampaignShowcase />
+      </div>
+
+      <InvertedSection>
+        <div className="px-10">
+          <PaymentFeatures />
+        </div>
+      </InvertedSection>
+
+      <InvertedSection>
+        <div className="px-10">
+          <Gallery />
+        </div>
+      </InvertedSection>
+
+      <div className="px-10">
+        <FAQ
+          heading="Frequently Asked Questions"
+          description="Find answers to common questions about donating, campaigns, and how we ensure your contributions make an impact."
+          supportHeading="Still have questions?"
+          supportDescription="Our support team is available 24/7 to help with donations, account issues, or campaign inquiries."
+          supportButtonText="Contact Support"
+          supportButtonUrl="/contact"
+        />
+      </div>
+      <InvertedSection>
+        <div className="px-10">
+          <Blog7
+            tagline="Impact Stories"
+            heading="See Your Donations at Work"
+            description="Read inspiring stories from communities and individuals whose lives have been transformed by your generous donations. Every contribution makes a difference."
+            buttonText="Read all stories"
+            buttonUrl="/stories"
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        </div>
+      </InvertedSection>
+      <div className="px-10">
+        <Cta
+          title="Ready to Make an Impact?"
+          description="Join our community of donors and start making a difference today. Every donation, no matter the size, helps create positive change."
+          buttonText="Start Donating Now"
+          buttonUrl="/donate"
+          items={[
+            "100% Secure Payments",
+            "Tax-Deductible Receipts",
+            "Real-Time Impact Tracking",
+            "Multiple Payment Options",
+            "Transparent Fund Usage",
+          ]}
+        />
+      </div>
+
+      <InvertedSection>
+        <div className="px-10">
+          <Community />
+        </div>
+      </InvertedSection>
+      <div className="px-10">
+        <Footer
+          logo={{
+            url: "/",
+            src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/logos/shadcnblockscom-icon.svg",
+            alt: "DonateNow Logo",
+            title: "DonateNow",
+          }}
+          sections={[
+            {
+              title: "Donate",
+              links: [
+                { name: "Active Campaigns", href: "/campaigns" },
+                { name: "Emergency Relief", href: "/campaigns/emergency" },
+                { name: "Education", href: "/campaigns/education" },
+                { name: "Healthcare", href: "/campaigns/healthcare" },
+              ],
+            },
+            {
+              title: "Support",
+              links: [
+                { name: "How It Works", href: "/how-it-works" },
+                { name: "Payment Security", href: "/security" },
+                { name: "Impact Reports", href: "/impact" },
+                { name: "Contact Us", href: "/contact" },
+              ],
+            },
+            {
+              title: "Account",
+              links: [
+                { name: "Sign In", href: "/sign-in" },
+                { name: "Register", href: "/sign-up" },
+                { name: "Donation History", href: "/history" },
+                { name: "Tax Receipts", href: "/receipts" },
+              ],
+            },
+          ]}
+          description="Making charitable giving simple, secure, and transparent. Join thousands of donors creating positive change worldwide."
+          copyright="© 2024 DonateNow. All rights reserved."
+          legalLinks={[
+            { name: "Privacy Policy", href: "/privacy" },
+            { name: "Terms of Service", href: "/terms" },
+            { name: "Cookie Policy", href: "/cookies" },
+          ]}
+        />
+      </div>
     </div>
   );
 }
