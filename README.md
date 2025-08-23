@@ -1,4 +1,4 @@
-1. User Management2
+1. User Management
 
 User Registration and Login
 – Support for donor and admin accounts
