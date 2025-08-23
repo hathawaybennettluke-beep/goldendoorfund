@@ -14,50 +14,48 @@ import { Stats } from "@/components/Stats";
 export default function Home() {
   return (
     <div className={`flex flex-col`}>
-      <InvertedSection>
-        <div className="px-10 py-10">
-          <Hero
-            heading="Make a Difference with Every Donation"
-            description="Join thousands of donors making a positive impact worldwide. Support causes you care about with secure, transparent donations that create real change in communities."
-            buttons={{
-              primary: {
-                text: "Start Donating",
-                url: "/donate",
+      <div className="px-10 py-10">
+        <Hero
+          heading="Make a Difference with Every Donation"
+          description="Join thousands of donors making a positive impact worldwide. Support causes you care about with secure, transparent donations that create real change in communities."
+          buttons={{
+            primary: {
+              text: "Start Donating",
+              url: "/donate",
+            },
+            secondary: {
+              text: "View Campaigns",
+              url: "/campaigns",
+            },
+          }}
+          reviews={{
+            count: 15000,
+            rating: 4.9,
+            avatars: [
+              {
+                src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-1.webp",
+                alt: "Donor 1",
               },
-              secondary: {
-                text: "View Campaigns",
-                url: "/campaigns",
+              {
+                src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-2.webp",
+                alt: "Donor 2",
               },
-            }}
-            reviews={{
-              count: 15000,
-              rating: 4.9,
-              avatars: [
-                {
-                  src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-1.webp",
-                  alt: "Donor 1",
-                },
-                {
-                  src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-2.webp",
-                  alt: "Donor 2",
-                },
-                {
-                  src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-3.webp",
-                  alt: "Donor 3",
-                },
-                {
-                  src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-4.webp",
-                  alt: "Donor 4",
-                },
-                {
-                  src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-5.webp",
-                  alt: "Donor 5",
-                },
-              ],
-            }}
-          />
-        </div>
-      </InvertedSection>
+              {
+                src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-3.webp",
+                alt: "Donor 3",
+              },
+              {
+                src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-4.webp",
+                alt: "Donor 4",
+              },
+              {
+                src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-5.webp",
+                alt: "Donor 5",
+              },
+            ],
+          }}
+        />
+      </div>
 
       <div className="px-10">
         <Stats
@@ -92,21 +90,17 @@ export default function Home() {
         />
       </div>
 
-      <InvertedSection>
-        <div className="px-10">
-          <CampaignShowcase />
-        </div>
-      </InvertedSection>
+      <div className="px-10">
+        <CampaignShowcase />
+      </div>
 
       <div className="px-10">
         <PaymentFeatures />
       </div>
 
-      <InvertedSection>
-        <div className="px-10">
-          <Gallery />
-        </div>
-      </InvertedSection>
+      <div className="px-10">
+        <Gallery />
+      </div>
 
       <div className="px-10">
         <FAQ
@@ -118,17 +112,15 @@ export default function Home() {
           supportButtonUrl="/contact"
         />
       </div>
-      <InvertedSection>
-        <div className="px-10">
-          <Blog7
-            tagline="Impact Stories"
-            heading="See Your Donations at Work"
-            description="Read inspiring stories from communities and individuals whose lives have been transformed by your generous donations. Every contribution makes a difference."
-            buttonText="Read all stories"
-            buttonUrl="/stories"
-          />
-        </div>
-      </InvertedSection>
+      <div className="px-10">
+        <Blog7
+          tagline="Impact Stories"
+          heading="See Your Donations at Work"
+          description="Read inspiring stories from communities and individuals whose lives have been transformed by your generous donations. Every contribution makes a difference."
+          buttonText="Read all stories"
+          buttonUrl="/stories"
+        />
+      </div>
       <div className="px-10">
         <Cta
           title="Ready to Make an Impact?"
@@ -145,11 +137,9 @@ export default function Home() {
         />
       </div>
 
-      <InvertedSection>
-        <div className="px-10">
-          <Community />
-        </div>
-      </InvertedSection>
+      <div className="px-10">
+        <Community />
+      </div>
       <div className="px-10">
         <Footer
           logo={{
@@ -162,10 +152,10 @@ export default function Home() {
             {
               title: "Donate",
               links: [
-                { name: "Active Campaigns", href: "/campaigns" },
-                { name: "Emergency Relief", href: "/campaigns/emergency" },
-                { name: "Education", href: "/campaigns/education" },
-                { name: "Healthcare", href: "/campaigns/healthcare" },
+                { name: "Active Campaigns", href: "/campaigns?status=active" },
+                { name: "Emergency Relief", href: "/campaigns?urgency=high" },
+                { name: "Education", href: "/campaigns?category=Education" },
+                { name: "Healthcare", href: "/campaigns?category=Healthcare" },
               ],
             },
             {

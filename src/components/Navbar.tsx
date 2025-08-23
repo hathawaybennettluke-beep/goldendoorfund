@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/accordion";
 import { AuthButtons } from "@/components/ui/auth-buttons";
 import { Button } from "@/components/ui/button";
+import { SimpleThemeToggle } from "@/components/ui/theme-toggle";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -25,6 +26,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 interface MenuItem {
   title: string;
@@ -35,7 +37,7 @@ interface MenuItem {
 }
 
 interface NavbarProps {
-  logo?: {
+  logo: {
     url: string;
     src: string;
     alt: string;
@@ -55,12 +57,7 @@ interface NavbarProps {
 }
 
 const Navbar = ({
-  logo = {
-    url: "https://www.google.com",
-    src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/logos/shadcnblockscom-icon.svg",
-    alt: "logo",
-    title: "google.com",
-  },
+  logo,
   menu,
   auth = {
     login: { title: "Login", url: "#" },
@@ -81,10 +78,12 @@ const Navbar = ({
           <div className="flex items-center gap-6">
             {/* Logo */}
             <a href={logo.url} className="flex items-center gap-2">
-              <img
+              <Image
                 src={logo.src}
-                className="max-h-8 dark:invert"
+                className="dark:invert"
                 alt={logo.alt}
+                width={160}
+                height={100}
               />
               <span className="text-lg font-semibold tracking-tighter">
                 {logo.title}
@@ -98,12 +97,15 @@ const Navbar = ({
               </NavigationMenu>
             </div>
           </div>
-          <AuthButtons
-            loginUrl={auth.login.url}
-            signupUrl={auth.signup.url}
-            loginText={auth.login.title}
-            signupText={auth.signup.title}
-          />
+          <div className="flex items-center gap-3">
+            <SimpleThemeToggle />
+            <AuthButtons
+              loginUrl={auth.login.url}
+              signupUrl={auth.signup.url}
+              loginText={auth.login.title}
+              signupText={auth.signup.title}
+            />
+          </div>
         </nav>
 
         {/* Mobile Menu */}
@@ -118,6 +120,7 @@ const Navbar = ({
               />
             </a>
             <div className="flex gap-2">
+              <SimpleThemeToggle />
               <Sheet>
                 <SheetTrigger asChild>
                   <Button variant="outline" size="icon">

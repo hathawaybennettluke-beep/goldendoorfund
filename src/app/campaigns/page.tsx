@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   Search,
   Filter,
@@ -143,13 +144,44 @@ const mockCampaigns: Campaign[] = [
 ];
 
 export default function CampaignsPage() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("all");
-  const [selectedStatus, setSelectedStatus] = useState("all");
-  const [selectedUrgency, setSelectedUrgency] = useState("all");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Initialize state from URL parameters
+  const [searchTerm, setSearchTerm] = useState(
+    searchParams.get("search") || ""
+  );
+  const [selectedCategory, setSelectedCategory] = useState(
+    searchParams.get("category") || "all"
+  );
+  const [selectedStatus, setSelectedStatus] = useState(
+    searchParams.get("status") || "all"
+  );
+  const [selectedUrgency, setSelectedUrgency] = useState(
+    searchParams.get("urgency") || "all"
+  );
 
   // Get unique categories for filter
   const categories = Array.from(new Set(mockCampaigns.map((c) => c.category)));
+
+  // Function to update URL with current filter state
+  const updateURL = useCallback(
+    (newParams: Record<string, string>) => {
+      const params = new URLSearchParams(searchParams.toString());
+
+      Object.entries(newParams).forEach(([key, value]) => {
+        if (value && value !== "all" && value !== "") {
+          params.set(key, value);
+        } else {
+          params.delete(key);
+        }
+      });
+
+      const newURL = params.toString() ? `?${params.toString()}` : "/campaigns";
+      router.push(newURL, { scroll: false });
+    },
+    [router, searchParams]
+  );
 
   // Filter and search campaigns
   const filteredCampaigns = useMemo(() => {
@@ -173,6 +205,68 @@ export default function CampaignsPage() {
       );
     });
   }, [searchTerm, selectedCategory, selectedStatus, selectedUrgency]);
+
+  // Track if we're updating from URL to prevent loops
+  const [isUpdatingFromURL, setIsUpdatingFromURL] = useState(false);
+
+  // Sync state with URL params on mount and when searchParams change
+  useEffect(() => {
+    setIsUpdatingFromURL(true);
+    setSearchTerm(searchParams.get("search") || "");
+    setSelectedCategory(searchParams.get("category") || "all");
+    setSelectedStatus(searchParams.get("status") || "all");
+    setSelectedUrgency(searchParams.get("urgency") || "all");
+    setIsUpdatingFromURL(false);
+  }, [searchParams]);
+
+  // Debounce search updates (only when not updating from URL)
+  useEffect(() => {
+    if (isUpdatingFromURL) return;
+
+    const timeoutId = setTimeout(() => {
+      updateURL({
+        search: searchTerm,
+        category: selectedCategory,
+        status: selectedStatus,
+        urgency: selectedUrgency,
+      });
+    }, 300);
+
+    return () => clearTimeout(timeoutId);
+  }, [
+    searchTerm,
+    selectedCategory,
+    selectedStatus,
+    selectedUrgency,
+    isUpdatingFromURL,
+    updateURL,
+  ]);
+
+  // Handlers for updating filters
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value);
+  };
+
+  const handleCategoryChange = (value: string) => {
+    setSelectedCategory(value);
+  };
+
+  const handleStatusChange = (value: string) => {
+    setSelectedStatus(value);
+  };
+
+  const handleUrgencyChange = (value: string) => {
+    setSelectedUrgency(value);
+  };
+
+  // Clear all filters
+  const clearFilters = () => {
+    setSearchTerm("");
+    setSelectedCategory("all");
+    setSelectedStatus("all");
+    setSelectedUrgency("all");
+    router.push("/campaigns", { scroll: false });
+  };
 
   const getProgressPercentage = (raised: number, goal: number) => {
     return Math.min((raised / goal) * 100, 100);
@@ -241,7 +335,7 @@ export default function CampaignsPage() {
               <Input
                 placeholder="Search campaigns, organizations, or keywords..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => handleSearchChange(e.target.value)}
                 className="pl-10"
               />
             </div>
@@ -253,7 +347,7 @@ export default function CampaignsPage() {
                 <span className="text-sm font-medium">Filters:</span>
               </div>
 
-              <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+              <Select value={selectedStatus} onValueChange={handleStatusChange}>
                 <SelectTrigger className="w-[140px]">
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
@@ -267,7 +361,7 @@ export default function CampaignsPage() {
 
               <Select
                 value={selectedCategory}
-                onValueChange={setSelectedCategory}
+                onValueChange={handleCategoryChange}
               >
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="Category" />
@@ -284,7 +378,7 @@ export default function CampaignsPage() {
 
               <Select
                 value={selectedUrgency}
-                onValueChange={setSelectedUrgency}
+                onValueChange={handleUrgencyChange}
               >
                 <SelectTrigger className="w-[140px]">
                   <SelectValue placeholder="Urgency" />
@@ -339,16 +433,7 @@ export default function CampaignsPage() {
                 Try adjusting your search terms or filters to find more
                 campaigns.
               </p>
-              <Button
-                onClick={() => {
-                  setSearchTerm("");
-                  setSelectedCategory("all");
-                  setSelectedStatus("all");
-                  setSelectedUrgency("all");
-                }}
-              >
-                Clear Filters
-              </Button>
+              <Button onClick={clearFilters}>Clear Filters</Button>
             </div>
           ) : (
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">

@@ -53,23 +53,18 @@ export function UserButton() {
           </a>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <a href="/history" className="cursor-pointer">
+          <a href="/donation-history" className="cursor-pointer">
             <Heart className="mr-2 h-4 w-4" />
             <span>Donation History</span>
           </a>
         </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <a href="/receipts" className="cursor-pointer">
-            <Receipt className="mr-2 h-4 w-4" />
-            <span>Tax Receipts</span>
-          </a>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
+
+        {/* <DropdownMenuItem asChild>
           <a href="/settings" className="cursor-pointer">
             <Settings className="mr-2 h-4 w-4" />
             <span>Settings</span>
           </a>
-        </DropdownMenuItem>
+        </DropdownMenuItem> */}
         <DropdownMenuSeparator />
         <DropdownMenuItem className="cursor-pointer" onClick={() => signOut()}>
           <LogOut className="mr-2 h-4 w-4" />
