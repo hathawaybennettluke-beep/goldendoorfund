@@ -106,7 +106,7 @@ const CampaignShowcase = ({
   };
 
   return (
-    <section className="py-12 sm:py-16 lg:py-24 px-4 sm:px-6 lg:px-10 relative overflow-hidden">
+    <section className="py-10 sm:py-14 lg:py-20 px-4 sm:px-6 lg:px-10 relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-secondary/5" />
@@ -116,27 +116,27 @@ const CampaignShowcase = ({
 
       <div className="container relative z-10">
         {/* Header Section */}
-        <div className="mx-auto max-w-4xl text-center mb-12 sm:mb-16">
+        <div className="mx-auto max-w-3xl text-center mb-8 sm:mb-12">
           <div className="inline-flex items-center gap-2 rounded-full bg-secondary/10 px-3 py-2 sm:px-4 sm:py-2 text-xs sm:text-sm font-medium text-secondary border border-secondary/20 mb-4 sm:mb-6">
             <Sparkles className="h-3 w-3 sm:h-4 sm:w-4" />
             Featured Campaigns
           </div>
           
-          <h2 className="mb-4 sm:mb-6 text-3xl sm:text-4xl font-bold md:text-5xl lg:text-6xl bg-gradient-to-r from-foreground via-foreground to-foreground/80 bg-clip-text">
+          <h2 className="mb-3 sm:mb-4 text-2xl sm:text-3xl font-bold md:text-4xl lg:text-5xl bg-gradient-to-r from-foreground via-foreground to-primary/80 bg-clip-text text-transparent leading-tight">
             {heading}
           </h2>
           
-          <p className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
+          <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-2xl mx-auto">
             {description}
           </p>
         </div>
 
         {/* Campaigns Grid */}
-        <div className="grid gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3 mb-12 sm:mb-16">
+        <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8 sm:mb-12">
           {campaigns.map((campaign) => (
             <div
               key={campaign.id}
-              className="group relative overflow-hidden rounded-2xl sm:rounded-3xl border border-border/50 bg-card/50 backdrop-blur-sm transition-all duration-500 hover:shadow-2xl hover:scale-[1.02] hover:border-primary/30"
+              className="group relative overflow-hidden rounded-xl sm:rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm transition-all duration-500 hover:shadow-xl hover:scale-[1.02] hover:border-primary/30"
             >
               {/* Background Glow */}
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -146,7 +146,7 @@ const CampaignShowcase = ({
                 <img
                   src={campaign.image}
                   alt={campaign.title}
-                  className="h-48 sm:h-56 w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  className="h-40 sm:h-48 w-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
                 
                 {/* Overlay Gradient */}
@@ -177,17 +177,17 @@ const CampaignShowcase = ({
               </div>
 
               {/* Content Section */}
-              <div className="p-4 sm:p-6">
-                <h3 className="mb-2 sm:mb-3 text-lg sm:text-xl font-bold line-clamp-2 group-hover:text-primary transition-colors duration-300">
+              <div className="p-3 sm:p-4">
+                <h3 className="mb-2 text-base sm:text-lg font-bold line-clamp-2 group-hover:text-primary transition-colors duration-300">
                   {campaign.title}
                 </h3>
                 
-                <p className="mb-4 sm:mb-6 text-xs sm:text-sm text-muted-foreground line-clamp-3 leading-relaxed">
+                <p className="mb-3 sm:mb-4 text-xs text-muted-foreground line-clamp-3 leading-relaxed">
                   {campaign.description}
                 </p>
 
                 {/* Progress Section */}
-                <div className="mb-4 sm:mb-6">
+                <div className="mb-3 sm:mb-4">
                   <div className="mb-2 sm:mb-3 flex justify-between text-xs sm:text-sm">
                     <span className="font-semibold text-foreground">
                       {formatCurrency(campaign.raised)} raised
@@ -198,7 +198,7 @@ const CampaignShowcase = ({
                   </div>
                   
                   {/* Enhanced Progress Bar */}
-                  <div className="relative h-3 w-full rounded-full bg-muted overflow-hidden">
+                  <div className="relative h-2.5 w-full rounded-full bg-muted overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20" />
                     <div
                       className="relative h-full rounded-full bg-gradient-to-r from-primary to-secondary transition-all duration-1000 ease-out shadow-lg"
@@ -211,7 +211,7 @@ const CampaignShowcase = ({
                   </div>
                   
                   {/* Stats Row */}
-                  <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
+                  <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
                     <span className="flex items-center gap-1.5">
                       <Users className="h-3.5 w-3.5" />
                       <span className="font-medium">{campaign.donors.toLocaleString()}</span> donors
@@ -227,16 +227,16 @@ const CampaignShowcase = ({
 
                 {/* CTA Button */}
                 <Button 
-                  size="lg"
-                  className="w-full bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group/btn"
+                  size="default"
+                  className="w-full bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-white shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 group/btn"
                 >
-                  <Heart className="mr-2 h-4 w-4 group-hover/btn:scale-110 transition-transform duration-300" />
+                  <Heart className="mr-2 h-3.5 w-3.5 group-hover/btn:scale-110 transition-transform duration-300" />
                   Donate Now
                 </Button>
               </div>
 
               {/* Hover Border Effect */}
-              <div className="absolute inset-0 rounded-3xl border-2 border-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="absolute inset-0 rounded-2xl border-2 border-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             </div>
           ))}
         </div>
@@ -245,13 +245,12 @@ const CampaignShowcase = ({
         <div className="text-center">
           <Button 
             asChild 
-            size="lg"
-            variant="outline"
-            className="group px-8 py-6 text-lg font-semibold border-2 hover:bg-primary hover:text-primary-foreground hover:border-primary/30 transition-all duration-300 shadow-lg hover:shadow-xl"
+            size="default"
+            className="group px-6 py-4 text-base font-semibold bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary text-white border-0 transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105"
           >
             <a href={viewAllUrl} className="flex items-center gap-2">
               View All Campaigns
-              <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
+              <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
             </a>
           </Button>
         </div>

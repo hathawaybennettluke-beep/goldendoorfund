@@ -87,7 +87,7 @@ const Community = () => {
             Join Our Community
           </div>
           
-          <h2 className="mb-6 text-4xl font-bold md:text-5xl lg:text-6xl bg-gradient-to-r from-foreground via-foreground to-foreground/80 bg-clip-text">
+          <h2 className="mb-6 text-4xl font-bold md:text-5xl lg:text-6xl bg-gradient-to-r from-foreground via-foreground to-primary/80 bg-clip-text text-transparent leading-tight">
             Connect, Share, and Make Impact Together
           </h2>
           
