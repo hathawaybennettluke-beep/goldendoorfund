@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/accordion";
 import { AuthButtons } from "@/components/ui/auth-buttons";
 import { Button } from "@/components/ui/button";
-import { SimpleThemeToggle } from "@/components/ui/theme-toggle";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -80,7 +79,7 @@ const Navbar = ({
             <a href={logo.url} className="flex items-center gap-2">
               <Image
                 src={logo.src}
-                className="dark:invert"
+                className=""
                 alt={logo.alt}
                 width={160}
                 height={100}
@@ -98,7 +97,6 @@ const Navbar = ({
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <SimpleThemeToggle />
             <AuthButtons
               loginUrl={auth.login.url}
               signupUrl={auth.signup.url}
@@ -115,12 +113,11 @@ const Navbar = ({
             <a href={logo.url} className="flex items-center gap-2">
               <img
                 src={logo.src}
-                className="max-h-8 dark:invert"
+                className="max-h-8"
                 alt={logo.alt}
               />
             </a>
             <div className="flex gap-2">
-              <SimpleThemeToggle />
               <Sheet>
                 <SheetTrigger asChild>
                   <Button variant="outline" size="icon">
@@ -133,7 +130,7 @@ const Navbar = ({
                       <a href={logo.url} className="flex items-center gap-2">
                         <img
                           src={logo.src}
-                          className="max-h-8 dark:invert"
+                          className="max-h-8"
                           alt={logo.alt}
                         />
                       </a>

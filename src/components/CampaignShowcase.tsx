@@ -1,4 +1,4 @@
-import { ArrowRight, Heart, Users, Target } from "lucide-react";
+import { ArrowRight, Heart, Users, Target, Sparkles, Globe, BookOpen, HeartHandshake } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface Campaign {
@@ -25,7 +25,7 @@ const defaultCampaigns: Campaign[] = [
     id: "1",
     title: "Emergency Water Wells for Rural Communities",
     description:
-      "Providing clean, safe drinking water to remote villages in East Africa. Each well serves 500+ people.",
+      "Providing clean, safe drinking water to remote villages in East Africa. Each well serves 500+ people and includes maintenance training for local communities.",
     image:
       "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/placeholder-1.svg",
     raised: 45000,
@@ -38,7 +38,7 @@ const defaultCampaigns: Campaign[] = [
     id: "2",
     title: "School Supplies for Underprivileged Children",
     description:
-      "Ensuring every child has access to basic educational materials and books for the upcoming school year.",
+      "Ensuring every child has access to basic educational materials and books for the upcoming school year. Supporting 500+ students across 10 schools.",
     image:
       "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/placeholder-1.svg",
     raised: 28000,
@@ -51,7 +51,7 @@ const defaultCampaigns: Campaign[] = [
     id: "3",
     title: "Mobile Medical Clinic for Remote Areas",
     description:
-      "Bringing essential healthcare services to communities without access to medical facilities.",
+      "Bringing essential healthcare services to communities without access to medical facilities. Includes equipment, staff training, and transportation.",
     image:
       "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/placeholder-1.svg",
     raised: 62000,
@@ -84,113 +84,174 @@ const CampaignShowcase = ({
   const getUrgencyColor = (urgency?: string) => {
     switch (urgency) {
       case "high":
-        return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
+        return "bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg";
       case "medium":
-        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200";
+        return "bg-gradient-to-r from-yellow-500 to-yellow-600 text-white shadow-lg";
       default:
-        return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
+        return "bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg";
+    }
+  };
+
+  const getCategoryIcon = (category: string) => {
+    switch (category.toLowerCase()) {
+      case "water & sanitation":
+        return <Globe className="h-4 w-4" />;
+      case "education":
+        return <BookOpen className="h-4 w-4" />;
+      case "healthcare":
+        return <HeartHandshake className="h-4 w-4" />;
+      default:
+        return <Heart className="h-4 w-4" />;
     }
   };
 
   return (
-    <section className="py-24">
-      <div className="container">
-        <div className="mb-12 text-center">
-          <h2 className="mb-4 text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">
+    <section className="py-24 relative overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-secondary/5" />
+        <div className="absolute top-1/4 right-1/4 h-64 w-64 rounded-full bg-secondary/10 blur-3xl" />
+        <div className="absolute bottom-1/4 left-1/4 h-48 w-48 rounded-full bg-primary/10 blur-2xl" />
+      </div>
+
+      <div className="container relative z-10">
+        {/* Header Section */}
+        <div className="mx-auto max-w-4xl text-center mb-16">
+          <div className="inline-flex items-center gap-2 rounded-full bg-secondary/10 px-4 py-2 text-sm font-medium text-secondary border border-secondary/20 mb-6">
+            <Sparkles className="h-4 w-4" />
+            Featured Campaigns
+          </div>
+          
+          <h2 className="mb-6 text-4xl font-bold md:text-5xl lg:text-6xl bg-gradient-to-r from-foreground via-foreground to-foreground/80 bg-clip-text">
             {heading}
           </h2>
-          <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
+          
+          <p className="text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
             {description}
           </p>
         </div>
 
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        {/* Campaigns Grid */}
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 mb-16">
           {campaigns.map((campaign) => (
             <div
               key={campaign.id}
-              className="group overflow-hidden rounded-lg border bg-card shadow-sm transition-all hover:shadow-lg"
+              className="group relative overflow-hidden rounded-3xl border border-border/50 bg-card/50 backdrop-blur-sm transition-all duration-500 hover:shadow-2xl hover:scale-[1.02] hover:border-primary/30"
             >
-              <div className="relative">
+              {/* Background Glow */}
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              
+              {/* Image Section */}
+              <div className="relative overflow-hidden">
                 <img
                   src={campaign.image}
                   alt={campaign.title}
-                  className="h-48 w-full object-cover transition-transform group-hover:scale-105"
+                  className="h-56 w-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
+                
+                {/* Overlay Gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                
+                {/* Urgency Badge */}
                 {campaign.urgency && (
-                  <div className="absolute top-3 left-3">
+                  <div className="absolute top-4 left-4">
                     <span
-                      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${getUrgencyColor(campaign.urgency)}`}
+                      className={`inline-flex items-center rounded-full px-3 py-1.5 text-xs font-semibold ${getUrgencyColor(campaign.urgency)} shadow-lg`}
                     >
                       {campaign.urgency === "high"
-                        ? "Urgent"
+                        ? "🔥 Urgent"
                         : campaign.urgency === "medium"
-                          ? "Active"
-                          : "Ongoing"}
+                          ? "⚡ Active"
+                          : "🌱 Ongoing"}
                     </span>
                   </div>
                 )}
-                <div className="absolute top-3 right-3">
-                  <span className="inline-flex items-center rounded-full bg-white/90 px-2.5 py-0.5 text-xs font-medium text-gray-800">
+                
+                {/* Category Badge */}
+                <div className="absolute top-4 right-4">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-background/90 backdrop-blur-sm px-3 py-1.5 text-xs font-medium text-foreground border border-border/50 shadow-lg">
+                    {getCategoryIcon(campaign.category)}
                     {campaign.category}
                   </span>
                 </div>
               </div>
 
+              {/* Content Section */}
               <div className="p-6">
-                <h3 className="mb-2 text-xl font-semibold line-clamp-2">
+                <h3 className="mb-3 text-xl font-bold line-clamp-2 group-hover:text-primary transition-colors duration-300">
                   {campaign.title}
                 </h3>
-                <p className="mb-4 text-sm text-muted-foreground line-clamp-3">
+                
+                <p className="mb-6 text-sm text-muted-foreground line-clamp-3 leading-relaxed">
                   {campaign.description}
                 </p>
 
-                {/* Progress Bar */}
-                <div className="mb-4">
-                  <div className="mb-2 flex justify-between text-sm">
-                    <span className="font-medium">
+                {/* Progress Section */}
+                <div className="mb-6">
+                  <div className="mb-3 flex justify-between text-sm">
+                    <span className="font-semibold text-foreground">
                       {formatCurrency(campaign.raised)} raised
                     </span>
                     <span className="text-muted-foreground">
                       {formatCurrency(campaign.goal)} goal
                     </span>
                   </div>
-                  <div className="h-2 w-full rounded-full bg-gray-200 dark:bg-gray-700">
+                  
+                  {/* Enhanced Progress Bar */}
+                  <div className="relative h-3 w-full rounded-full bg-muted overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20" />
                     <div
-                      className="h-2 rounded-full bg-primary transition-all duration-300"
+                      className="relative h-full rounded-full bg-gradient-to-r from-primary to-secondary transition-all duration-1000 ease-out shadow-lg"
                       style={{
                         width: `${getProgressPercentage(campaign.raised, campaign.goal)}%`,
                       }}
-                    />
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r from-primary/80 to-secondary/80 animate-pulse" />
+                    </div>
                   </div>
-                  <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground">
-                    <span className="flex items-center gap-1">
-                      <Users className="h-3 w-3" />
-                      {campaign.donors} donors
+                  
+                  {/* Stats Row */}
+                  <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
+                    <span className="flex items-center gap-1.5">
+                      <Users className="h-3.5 w-3.5" />
+                      <span className="font-medium">{campaign.donors.toLocaleString()}</span> donors
                     </span>
-                    <span className="flex items-center gap-1">
-                      <Target className="h-3 w-3" />
-                      {Math.round(
-                        getProgressPercentage(campaign.raised, campaign.goal)
-                      )}
-                      % funded
+                    <span className="flex items-center gap-1.5">
+                      <Target className="h-3.5 w-3.5" />
+                      <span className="font-medium">
+                        {Math.round(getProgressPercentage(campaign.raised, campaign.goal))}%
+                      </span> funded
                     </span>
                   </div>
                 </div>
 
-                <Button className="w-full" variant="outline">
-                  <Heart className="mr-2 h-4 w-4" />
+                {/* CTA Button */}
+                <Button 
+                  size="lg"
+                  className="w-full bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group/btn"
+                >
+                  <Heart className="mr-2 h-4 w-4 group-hover/btn:scale-110 transition-transform duration-300" />
                   Donate Now
                 </Button>
               </div>
+
+              {/* Hover Border Effect */}
+              <div className="absolute inset-0 rounded-3xl border-2 border-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             </div>
           ))}
         </div>
 
-        <div className="mt-12 text-center">
-          <Button asChild size="lg">
-            <a href={viewAllUrl}>
+        {/* View All Button */}
+        <div className="text-center">
+          <Button 
+            asChild 
+            size="lg"
+            variant="outline"
+            className="group px-8 py-6 text-lg font-semibold border-2 hover:bg-primary hover:text-primary-foreground hover:border-primary/30 transition-all duration-300 shadow-lg hover:shadow-xl"
+          >
+            <a href={viewAllUrl} className="flex items-center gap-2">
               View All Campaigns
-              <ArrowRight className="ml-2 h-4 w-4" />
+              <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
             </a>
           </Button>
         </div>

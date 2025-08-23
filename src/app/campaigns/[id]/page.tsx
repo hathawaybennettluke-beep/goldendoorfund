@@ -136,13 +136,13 @@ export default function CampaignDetailPage() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "active":
-        return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
+        return "bg-green-100 text-green-800";
       case "completed":
-        return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
+        return "bg-blue-100 text-blue-800";
       case "upcoming":
-        return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200";
+        return "bg-gray-100 text-gray-800";
       default:
-        return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200";
+        return "bg-gray-100 text-gray-800";
     }
   };
 
@@ -234,7 +234,7 @@ export default function CampaignDetailPage() {
                       of {formatCurrency(campaign.goal)} goal
                     </span>
                   </div>
-                  <div className="h-3 w-full rounded-full bg-gray-200 dark:bg-gray-700 mb-4">
+                  <div className="h-3 w-full rounded-full bg-gray-200 mb-4">
                     <div
                       className="h-3 rounded-full bg-primary transition-all duration-300"
                       style={{
@@ -288,7 +288,7 @@ export default function CampaignDetailPage() {
               <div className="mb-8">
                 <h2 className="text-2xl font-bold mb-4">About This Campaign</h2>
                 <div
-                  className="prose prose-gray dark:prose-invert max-w-none"
+                  className="prose prose-gray max-w-none"
                   dangerouslySetInnerHTML={{ __html: campaign.fullDescription }}
                 />
               </div>

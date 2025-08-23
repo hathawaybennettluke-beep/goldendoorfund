@@ -322,18 +322,18 @@ export default function ContactPage() {
               </div>
 
               {/* Emergency Contact */}
-              <div className="p-6 rounded-lg bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800">
-                <h4 className="font-semibold text-red-800 dark:text-red-200 mb-2">
+              <div className="p-6 rounded-lg bg-red-50 border border-red-200">
+                <h4 className="font-semibold text-red-800 mb-2">
                   Emergency Support
                 </h4>
-                <p className="text-sm text-red-700 dark:text-red-300 mb-3">
+                <p className="text-sm text-red-700 mb-3">
                   For urgent issues affecting active donations or security
                   concerns, contact our emergency hotline:
                 </p>
-                <p className="font-medium text-red-800 dark:text-red-200">
+                <p className="font-medium text-red-800">
                   📞 +1 (555) 911-HELP
                 </p>
-                <p className="text-xs text-red-600 dark:text-red-400 mt-1">
+                <p className="text-xs text-red-600 mt-1">
                   Available 24/7 for critical issues only
                 </p>
               </div>
