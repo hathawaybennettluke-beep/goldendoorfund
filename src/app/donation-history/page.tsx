@@ -192,7 +192,7 @@ export default function DonationHistoryPage() {
           <div className="max-w-6xl mx-auto">
             <h1 className="text-4xl font-bold mb-4">Donation History</h1>
             <p className="text-muted-foreground text-lg">
-              Track your contributions and see the impact you've made
+              Track your contributions and see the impact you&apos;ve made
             </p>
           </div>
         </div>
