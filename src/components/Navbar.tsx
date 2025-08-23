@@ -158,41 +158,41 @@ const Navbar = ({
 
         {/* Mobile Menu */}
         <div className="block lg:hidden">
-          <div className="flex items-center justify-between py-3">
+          <div className="flex items-center justify-between py-3 px-4 sm:px-6">
             {/* Logo */}
-            <a href={logo.url} className="flex items-center gap-4 ml-6">
+            <a href={logo.url} className="flex items-center gap-3 sm:gap-4 ml-2 sm:ml-6">
               <img
                 src={logo.src}
-                className="h-20 w-auto"
+                className="h-16 w-auto sm:h-20"
                 alt={logo.alt}
               />
             </a>
             
             {/* Mobile Menu Button */}
-            <div className="flex gap-3">
+            <div className="flex gap-2 sm:gap-3">
               <Sheet>
                 <SheetTrigger asChild>
-                  <Button variant="outline" size="icon" className="border-border/50 h-12 w-12">
-                    <Menu className="size-5" />
+                  <Button variant="outline" size="icon" className="border-border/50 h-10 w-10 sm:h-12 sm:w-12">
+                    <Menu className="size-4 sm:size-5" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent className="overflow-y-auto">
+                <SheetContent className="overflow-y-auto w-[300px] sm:w-[350px]">
                   <SheetHeader>
                     <SheetTitle>
                       <a href={logo.url} className="flex items-center gap-3">
                         <img
                           src={logo.src}
-                          className="h-10 w-auto"
+                          className="h-8 w-auto sm:h-10"
                           alt={logo.alt}
                         />
                       </a>
                     </SheetTitle>
                   </SheetHeader>
-                  <div className="flex flex-col gap-6 p-6">
+                  <div className="flex flex-col gap-4 sm:gap-6 p-4 sm:p-6">
                     <Accordion
                       type="single"
                       collapsible
-                      className="flex w-full flex-col gap-4"
+                      className="flex w-full flex-col gap-3 sm:gap-4"
                     >
                       {menu.map((item) => renderMobileMenuItem(item))}
                     </Accordion>
@@ -219,7 +219,7 @@ const renderMobileMenuItem = (item: MenuItem) => {
   if (item.items) {
     return (
       <AccordionItem key={item.title} value={item.title} className="border-b border-border/30">
-        <AccordionTrigger className="text-lg py-4 font-semibold hover:no-underline hover:text-primary transition-colors">
+        <AccordionTrigger className="text-base sm:text-lg py-3 sm:py-4 font-semibold hover:no-underline hover:text-primary transition-colors">
           {item.title}
         </AccordionTrigger>
         <AccordionContent className="mt-2">
@@ -237,7 +237,7 @@ const renderMobileMenuItem = (item: MenuItem) => {
     <a 
       key={item.title} 
       href={item.url} 
-      className="block py-4 text-lg font-semibold text-foreground hover:text-primary transition-colors border-b border-border/30"
+      className="block py-3 sm:py-4 text-base sm:text-lg font-semibold text-foreground hover:text-primary transition-colors border-b border-border/30"
     >
       {item.title}
     </a>
@@ -247,7 +247,7 @@ const renderMobileMenuItem = (item: MenuItem) => {
 const SubMenuLink = ({ item }: { item: MenuItem }) => {
   return (
     <a
-      className="group flex select-none flex-row gap-4 rounded-lg p-4 leading-none no-underline outline-none transition-all duration-300 hover:bg-primary/10 hover:text-primary"
+      className="group flex select-none flex-row gap-3 sm:gap-4 rounded-lg p-3 sm:p-4 leading-none no-underline outline-none transition-all duration-300 hover:bg-primary/10 hover:text-primary"
       href={item.url}
     >
       <div className="text-foreground group-hover:text-primary transition-colors duration-300">
@@ -258,7 +258,7 @@ const SubMenuLink = ({ item }: { item: MenuItem }) => {
           {item.title}
         </div>
         {item.description && (
-          <p className="text-muted-foreground text-sm leading-snug group-hover:text-foreground transition-colors duration-300">
+          <p className="text-muted-foreground text-xs sm:text-sm leading-snug group-hover:text-foreground transition-colors duration-300">
             {item.description}
           </p>
         )}

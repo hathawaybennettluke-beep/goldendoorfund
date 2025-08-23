@@ -108,35 +108,35 @@ const Footer = ({
         <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_48%,rgba(0,0,0,0.02)_50%,transparent_52%)] bg-[size:100px_100px]" />
       </div>
 
-      <div className="relative z-10 px-6">
+      <div className="relative z-10 px-4 sm:px-6">
         {/* Main Footer Content */}
-        <div className="py-12">
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <div className="py-8 sm:py-12">
+          <div className="grid gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-4">
             {/* Logo & Description */}
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               <div className="flex items-center">
                 <a href={logo.url} className="group">
                   <img
                     src={logo.src}
                     alt={logo.alt}
                     title={logo.title}
-                    className="h-32 w-auto group-hover:scale-105 transition-transform duration-300"
+                    className="h-20 w-auto sm:h-32 group-hover:scale-105 transition-transform duration-300"
                   />
                 </a>
               </div>
               
-              <p className="text-muted-foreground text-lg leading-relaxed max-w-xs">
+              <p className="text-muted-foreground text-sm sm:text-lg leading-relaxed max-w-xs">
                 {description}
               </p>
               
               {/* Contact Info */}
               <div className="space-y-2">
-                <div className="flex items-center gap-2 text-base text-muted-foreground">
-                  <Mail className="h-5 w-5 text-primary" />
+                <div className="flex items-center gap-2 text-sm sm:text-base text-muted-foreground">
+                  <Mail className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                   <span>hello@goldendoor.org</span>
                 </div>
-                <div className="flex items-center gap-2 text-base text-muted-foreground">
-                  <Phone className="h-5 w-5 text-primary" />
+                <div className="flex items-center gap-2 text-sm sm:text-base text-muted-foreground">
+                  <Phone className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                   <span>+1 (555) 123-4567</span>
                 </div>
               </div>
@@ -144,16 +144,16 @@ const Footer = ({
 
             {/* Footer Links */}
             {sections.map((section, sectionIdx) => (
-              <div key={sectionIdx} className="space-y-3">
-                <h3 className="text-lg font-semibold text-foreground border-b border-border/30 pb-1">
+              <div key={sectionIdx} className="space-y-2 sm:space-y-3">
+                <h3 className="text-base sm:text-lg font-semibold text-foreground border-b border-border/30 pb-1">
                   {section.title}
                 </h3>
-                <ul className="space-y-2">
+                <ul className="space-y-1.5 sm:space-y-2">
                   {section.links.map((link, linkIdx) => (
                     <li key={linkIdx}>
                       <a 
                         href={link.href}
-                        className="text-base text-muted-foreground hover:text-primary transition-colors duration-300 hover:translate-x-1 inline-block transition-transform duration-300"
+                        className="text-sm sm:text-base text-muted-foreground hover:text-primary transition-colors duration-300 hover:translate-x-1 inline-block transition-transform duration-300"
                       >
                         {link.name}
                       </a>
@@ -166,27 +166,27 @@ const Footer = ({
         </div>
 
         {/* Newsletter Section */}
-        <div className="py-8 border-t border-border/50">
+        <div className="py-6 sm:py-8 border-t border-border/50">
           <div className="max-w-2xl mx-auto">
-            <div className="relative overflow-hidden rounded-2xl border border-border/50 bg-gradient-to-br from-card to-card/80 p-8 shadow-lg">
+            <div className="relative overflow-hidden rounded-xl sm:rounded-2xl border border-border/50 bg-gradient-to-br from-card to-card/80 p-6 sm:p-8 shadow-lg">
               {/* Enhanced background pattern */}
               <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(0,0,0,0.02)_25%,rgba(0,0,0,0.02)_75%,transparent_75%)] bg-[size:20px_20px]" />
               
               {/* Additional decorative elements */}
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-primary/10 to-transparent rounded-full blur-2xl" />
-              <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-secondary/10 to-transparent rounded-full blur-xl" />
+              <div className="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 bg-gradient-to-br from-primary/10 to-transparent rounded-full blur-2xl" />
+              <div className="absolute bottom-0 left-0 w-16 h-16 sm:w-24 sm:h-24 bg-gradient-to-tr from-secondary/10 to-transparent rounded-full blur-xl" />
               
               <div className="relative z-10 text-center">
-                <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-base font-medium text-primary border border-primary/20 mb-4">
-                  <Sparkles className="h-5 w-5" />
+                <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-2 sm:px-4 sm:py-2 text-sm sm:text-base font-medium text-primary border border-primary/20 mb-3 sm:mb-4">
+                  <Sparkles className="h-4 w-4 sm:h-5 sm:w-5" />
                   Stay Updated
                 </div>
                 
-                <h3 className="text-3xl font-bold mb-3 text-foreground">
+                <h3 className="text-2xl sm:text-3xl font-bold mb-2 sm:mb-3 text-foreground">
                   Get Impact Updates & Stories
                 </h3>
                 
-                <p className="text-muted-foreground mb-6 text-lg leading-relaxed">
+                <p className="text-muted-foreground mb-4 sm:mb-6 text-base sm:text-lg leading-relaxed">
                   Subscribe for campaign progress and impact stories.
                 </p>
                 
@@ -194,11 +194,11 @@ const Footer = ({
                   <input
                     type="email"
                     placeholder="Enter your email"
-                    className="flex-1 px-4 py-3 rounded-lg border border-border/50 bg-background/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all duration-300 text-foreground placeholder-muted-foreground text-lg"
+                    className="flex-1 px-3 py-2 sm:px-4 sm:py-3 rounded-lg border border-border/50 bg-background/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all duration-300 text-foreground placeholder-muted-foreground text-sm sm:text-lg"
                   />
                   <Button 
                     size="sm"
-                    className="px-8 py-3 text-lg bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-primary-foreground shadow-md hover:shadow-lg transition-all duration-300 font-medium"
+                    className="px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base font-semibold bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border-0"
                   >
                     Subscribe
                   </Button>
@@ -209,50 +209,44 @@ const Footer = ({
         </div>
 
         {/* Bottom Section */}
-        <div className="py-6 border-t border-border/50">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div className="py-6 sm:py-8 border-t border-border/50">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6">
             {/* Copyright */}
-            <div className="flex items-center gap-2 text-base text-muted-foreground">
-              <span>{copyright}</span>
-              <div className="flex items-center gap-1">
-                <span>Made with</span>
-                <Heart className="h-5 w-5 text-red-500 fill-red-500" />
-                <span>for impact</span>
-              </div>
-            </div>
+            <p className="text-sm sm:text-base text-muted-foreground text-center sm:text-left">
+              {copyright}
+            </p>
             
             {/* Legal Links */}
-            <ul className="flex items-center gap-4 text-base text-muted-foreground">
-              {legalLinks.map((link, idx) => (
-                <li key={idx}>
-                  <a 
-                    href={link.href}
-                    className="hover:text-primary transition-colors duration-300 hover:underline"
-                  >
-                    {link.name}
-                  </a>
-                </li>
+            <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
+              {legalLinks.map((link, linkIdx) => (
+                <a
+                  key={linkIdx}
+                  href={link.href}
+                  className="text-xs sm:text-sm text-muted-foreground hover:text-primary transition-colors duration-300"
+                >
+                  {link.name}
+                </a>
               ))}
-            </ul>
+            </div>
           </div>
         </div>
+      </div>
 
-        {/* Social Links */}
-        <div className="pb-6 text-center">
-          <div className="flex items-center justify-center gap-3">
-            {socialLinks.map((social, idx) => (
-              <a
-                key={idx}
-                href={social.href}
-                aria-label={social.label}
-                className="group p-3 rounded-lg bg-muted/50 hover:bg-primary/10 transition-all duration-300 hover:scale-110 border border-border/50 hover:border-primary/30"
-              >
-                <div className="text-muted-foreground group-hover:text-primary transition-colors duration-300">
-                  {social.icon}
-                </div>
-              </a>
-            ))}
-          </div>
+      {/* Social Links */}
+      <div className="pb-6 text-center">
+        <div className="flex items-center justify-center gap-3">
+          {socialLinks.map((social, idx) => (
+            <a
+              key={idx}
+              href={social.href}
+              aria-label={social.label}
+              className="group p-3 rounded-lg bg-muted/50 hover:bg-primary/10 transition-all duration-300 hover:scale-110 border border-border/50 hover:border-primary/30"
+            >
+              <div className="text-muted-foreground group-hover:text-primary transition-colors duration-300">
+                {social.icon}
+              </div>
+            </a>
+          ))}
         </div>
       </div>
 

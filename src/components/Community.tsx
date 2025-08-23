@@ -97,31 +97,31 @@ const Community = () => {
         </div>
 
         {/* Testimonials Section */}
-        <div className="mb-20">
-          <div className="text-center mb-12">
-            <h3 className="text-2xl font-bold mb-4">What Our Community Says</h3>
-            <p className="text-muted-foreground">Real stories from real people making a difference</p>
+        <div className="mb-16 sm:mb-20">
+          <div className="text-center mb-8 sm:mb-12">
+            <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">What Our Community Says</h3>
+            <p className="text-muted-foreground text-sm sm:text-base">Real stories from real people making a difference</p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid gap-6 sm:gap-8 md:grid-cols-3">
             {testimonials.map((testimonial, index) => (
               <div
                 key={index}
-                className="group relative overflow-hidden rounded-3xl border border-border/50 bg-card/50 backdrop-blur-sm p-8 hover:shadow-2xl transition-all duration-500 hover:scale-105 hover:border-primary/30"
+                className="group relative overflow-hidden rounded-2xl sm:rounded-3xl border border-border/50 bg-card/50 backdrop-blur-sm p-6 sm:p-8 hover:shadow-2xl transition-all duration-500 hover:scale-105 hover:border-primary/30"
               >
                 {/* Background Glow */}
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 
                 {/* Rating */}
-                <div className="flex items-center gap-1 mb-4">
+                <div className="flex items-center gap-1 mb-3 sm:mb-4">
                   {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                    <Star key={i} className="h-3 w-3 sm:h-4 sm:w-4 fill-yellow-400 text-yellow-400" />
                   ))}
                 </div>
                 
                 {/* Content */}
-                <div className="relative mb-6">
-                  <p className="text-muted-foreground leading-relaxed italic">
+                <div className="relative mb-4 sm:mb-6">
+                  <p className="text-muted-foreground leading-relaxed italic text-sm sm:text-base">
                     &ldquo;{testimonial.content}&rdquo;
                   </p>
                 </div>
@@ -131,85 +131,85 @@ const Community = () => {
                   <img
                     src={testimonial.avatar}
                     alt={testimonial.name}
-                    className="h-12 w-12 rounded-full object-cover border-2 border-border/50"
+                    className="h-10 w-10 sm:h-12 sm:w-12 rounded-full object-cover border-2 border-border/50"
                   />
                   <div>
-                    <div className="font-semibold text-foreground">{testimonial.name}</div>
-                    <div className="text-sm text-muted-foreground">{testimonial.role}</div>
+                    <div className="font-semibold text-foreground text-sm sm:text-base">{testimonial.name}</div>
+                    <div className="text-xs sm:text-sm text-muted-foreground">{testimonial.role}</div>
                   </div>
                 </div>
                 
                 {/* Hover Border Effect */}
-                <div className="absolute inset-0 rounded-3xl border-2 border-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute inset-0 rounded-2xl sm:rounded-3xl border-2 border-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               </div>
             ))}
           </div>
         </div>
 
         {/* Social Platforms Section */}
-        <div className="mb-16">
-          <div className="text-center mb-12">
-            <h3 className="text-2xl font-bold mb-4">Connect With Us</h3>
-            <p className="text-muted-foreground">Follow us on social media for updates, stories, and community engagement</p>
+        <div className="mb-12 sm:mb-16">
+          <div className="text-center mb-8 sm:mb-12">
+            <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Connect With Us</h3>
+            <p className="text-muted-foreground text-sm sm:text-base">Follow us on social media for updates, stories, and community engagement</p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
             {socialPlatforms.map((platform, index) => (
               <a
                 key={index}
                 href={platform.url}
-                className="group relative overflow-hidden rounded-3xl border border-border/50 bg-card/50 backdrop-blur-sm p-8 hover:shadow-2xl transition-all duration-500 hover:scale-105 hover:border-primary/30"
+                className="group relative overflow-hidden rounded-2xl sm:rounded-3xl border border-border/50 bg-card/50 backdrop-blur-sm p-6 sm:p-8 hover:shadow-2xl transition-all duration-500 hover:scale-105 hover:border-primary/30"
               >
                 {/* Background Gradient */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${platform.bgColor} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
                 
                 <div className="relative">
                   {/* Icon */}
-                  <div className={`mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${platform.color} text-white shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                  <div className={`mb-4 sm:mb-6 flex h-12 w-12 sm:h-16 sm:w-16 items-center justify-center rounded-xl sm:rounded-2xl bg-gradient-to-br ${platform.color} text-white shadow-lg group-hover:scale-110 transition-transform duration-300`}>
                     {platform.icon}
                   </div>
                   
                   {/* Content */}
-                  <h4 className="mb-3 text-xl font-bold text-foreground group-hover:text-primary transition-colors duration-300">
+                  <h4 className="mb-2 sm:mb-3 text-lg sm:text-xl font-bold text-foreground group-hover:text-primary transition-colors duration-300">
                     {platform.name}
                   </h4>
                   
-                  <p className="mb-6 text-muted-foreground leading-relaxed">
+                  <p className="mb-4 sm:mb-6 text-muted-foreground leading-relaxed text-sm sm:text-base">
                     {platform.description}
                   </p>
                   
                   {/* Arrow */}
                   <div className="flex items-center gap-2 text-primary font-medium group-hover:text-primary/80 transition-colors duration-300">
-                    <span>Follow us</span>
-                    <ArrowUpRight className="h-4 w-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
+                    <span className="text-sm sm:text-base">Follow us</span>
+                    <ArrowUpRight className="h-3 w-3 sm:h-4 sm:w-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
                   </div>
                 </div>
                 
                 {/* Hover Border Effect */}
-                <div className="absolute inset-0 rounded-3xl border-2 border-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute inset-0 rounded-2xl sm:rounded-3xl border-2 border-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               </a>
             ))}
           </div>
         </div>
 
         {/* Community Stats */}
-        <div className="mb-16">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20">
-              <div className="text-3xl font-bold text-primary mb-2">15K+</div>
-              <div className="text-sm text-muted-foreground">Community Members</div>
+        <div className="mb-12 sm:mb-16">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8">
+            <div className="text-center p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20">
+              <div className="text-2xl sm:text-3xl font-bold text-primary mb-1 sm:mb-2">15K+</div>
+              <div className="text-xs sm:text-sm text-muted-foreground">Community Members</div>
             </div>
-            <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-secondary/10 to-secondary/5 border border-secondary/20">
-              <div className="text-3xl font-bold text-secondary mb-2">450+</div>
-              <div className="text-sm text-muted-foreground">Campaigns Supported</div>
+            <div className="text-center p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-gradient-to-br from-secondary/10 to-secondary/5 border border-secondary/20">
+              <div className="text-2xl sm:text-3xl font-bold text-secondary mb-1 sm:mb-2">450+</div>
+              <div className="text-xs sm:text-sm text-muted-foreground">Campaigns Supported</div>
             </div>
-            <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-accent/10 to-accent/5 border border-accent/20">
-              <div className="text-3xl font-bold text-accent mb-2">98.5%</div>
-              <div className="text-sm text-muted-foreground">Satisfaction Rate</div>
+            <div className="text-center p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-gradient-to-br from-accent/10 to-accent/5 border border-accent/20">
+              <div className="text-2xl sm:text-3xl font-bold text-accent mb-1 sm:mb-2">98.5%</div>
+              <div className="text-xs sm:text-sm text-muted-foreground">Satisfaction Rate</div>
             </div>
-            <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-green-500/10 to-green-500/5 border border-green-200">
-              <div className="text-3xl font-bold text-green-600 mb-2">24/7</div>
-              <div className="text-sm text-muted-foreground">Support Available</div>
+            <div className="text-center p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-gradient-to-br from-green-500/10 to-green-500/5 border border-green-200">
+              <div className="text-2xl sm:text-3xl font-bold text-green-600 mb-1 sm:mb-2">24/7</div>
+              <div className="text-xs sm:text-sm text-muted-foreground">Support Available</div>
             </div>
           </div>
         </div>

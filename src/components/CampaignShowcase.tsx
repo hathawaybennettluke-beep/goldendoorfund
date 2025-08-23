@@ -106,37 +106,37 @@ const CampaignShowcase = ({
   };
 
   return (
-    <section className="py-24 px-10 relative overflow-hidden">
+    <section className="py-12 sm:py-16 lg:py-24 px-4 sm:px-6 lg:px-10 relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-secondary/5" />
-        <div className="absolute top-1/4 right-1/4 h-64 w-64 rounded-full bg-secondary/10 blur-3xl" />
-        <div className="absolute bottom-1/4 left-1/4 h-48 w-48 rounded-full bg-primary/10 blur-2xl" />
+        <div className="absolute top-1/4 right-1/4 h-32 w-32 sm:h-64 sm:w-64 rounded-full bg-secondary/10 blur-3xl" />
+        <div className="absolute bottom-1/4 left-1/4 h-24 w-24 sm:h-48 sm:w-48 rounded-full bg-primary/10 blur-2xl" />
       </div>
 
       <div className="container relative z-10">
         {/* Header Section */}
-        <div className="mx-auto max-w-4xl text-center mb-16">
-          <div className="inline-flex items-center gap-2 rounded-full bg-secondary/10 px-4 py-2 text-sm font-medium text-secondary border border-secondary/20 mb-6">
-            <Sparkles className="h-4 w-4" />
+        <div className="mx-auto max-w-4xl text-center mb-12 sm:mb-16">
+          <div className="inline-flex items-center gap-2 rounded-full bg-secondary/10 px-3 py-2 sm:px-4 sm:py-2 text-xs sm:text-sm font-medium text-secondary border border-secondary/20 mb-4 sm:mb-6">
+            <Sparkles className="h-3 w-3 sm:h-4 sm:w-4" />
             Featured Campaigns
           </div>
           
-          <h2 className="mb-6 text-4xl font-bold md:text-5xl lg:text-6xl bg-gradient-to-r from-foreground via-foreground to-foreground/80 bg-clip-text">
+          <h2 className="mb-4 sm:mb-6 text-3xl sm:text-4xl font-bold md:text-5xl lg:text-6xl bg-gradient-to-r from-foreground via-foreground to-foreground/80 bg-clip-text">
             {heading}
           </h2>
           
-          <p className="text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
+          <p className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
             {description}
           </p>
         </div>
 
         {/* Campaigns Grid */}
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 mb-16">
+        <div className="grid gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3 mb-12 sm:mb-16">
           {campaigns.map((campaign) => (
             <div
               key={campaign.id}
-              className="group relative overflow-hidden rounded-3xl border border-border/50 bg-card/50 backdrop-blur-sm transition-all duration-500 hover:shadow-2xl hover:scale-[1.02] hover:border-primary/30"
+              className="group relative overflow-hidden rounded-2xl sm:rounded-3xl border border-border/50 bg-card/50 backdrop-blur-sm transition-all duration-500 hover:shadow-2xl hover:scale-[1.02] hover:border-primary/30"
             >
               {/* Background Glow */}
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -146,7 +146,7 @@ const CampaignShowcase = ({
                 <img
                   src={campaign.image}
                   alt={campaign.title}
-                  className="h-56 w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  className="h-48 sm:h-56 w-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
                 
                 {/* Overlay Gradient */}
@@ -154,9 +154,9 @@ const CampaignShowcase = ({
                 
                 {/* Urgency Badge */}
                 {campaign.urgency && (
-                  <div className="absolute top-4 left-4">
+                  <div className="absolute top-3 left-3 sm:top-4 sm:left-4">
                     <span
-                      className={`inline-flex items-center rounded-full px-3 py-1.5 text-xs font-semibold ${getUrgencyColor(campaign.urgency)} shadow-lg`}
+                      className={`inline-flex items-center rounded-full px-2 py-1 sm:px-3 sm:py-1.5 text-xs font-semibold ${getUrgencyColor(campaign.urgency)} shadow-lg`}
                     >
                       {campaign.urgency === "high"
                         ? "🔥 Urgent"
@@ -168,8 +168,8 @@ const CampaignShowcase = ({
                 )}
                 
                 {/* Category Badge */}
-                <div className="absolute top-4 right-4">
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-background/90 backdrop-blur-sm px-3 py-1.5 text-xs font-medium text-foreground border border-border/50 shadow-lg">
+                <div className="absolute top-3 right-3 sm:top-4 sm:right-4">
+                  <span className="inline-flex items-center gap-1 sm:gap-1.5 rounded-full bg-background/90 backdrop-blur-sm px-2 py-1 sm:px-3 sm:py-1.5 text-xs font-medium text-foreground border border-border/50 shadow-lg">
                     {getCategoryIcon(campaign.category)}
                     {campaign.category}
                   </span>
@@ -177,18 +177,18 @@ const CampaignShowcase = ({
               </div>
 
               {/* Content Section */}
-              <div className="p-6">
-                <h3 className="mb-3 text-xl font-bold line-clamp-2 group-hover:text-primary transition-colors duration-300">
+              <div className="p-4 sm:p-6">
+                <h3 className="mb-2 sm:mb-3 text-lg sm:text-xl font-bold line-clamp-2 group-hover:text-primary transition-colors duration-300">
                   {campaign.title}
                 </h3>
                 
-                <p className="mb-6 text-sm text-muted-foreground line-clamp-3 leading-relaxed">
+                <p className="mb-4 sm:mb-6 text-xs sm:text-sm text-muted-foreground line-clamp-3 leading-relaxed">
                   {campaign.description}
                 </p>
 
                 {/* Progress Section */}
-                <div className="mb-6">
-                  <div className="mb-3 flex justify-between text-sm">
+                <div className="mb-4 sm:mb-6">
+                  <div className="mb-2 sm:mb-3 flex justify-between text-xs sm:text-sm">
                     <span className="font-semibold text-foreground">
                       {formatCurrency(campaign.raised)} raised
                     </span>
