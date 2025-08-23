@@ -211,7 +211,7 @@ const Gallery = ({
             },
           }}
         >
-          <CarouselContent className="ml-0 2xl:mr-[max(0rem,calc(50vw-700px))] 2xl:ml-[max(8rem,calc(50vw-700px))]">
+          <CarouselContent className="ml-0">
             {items.map((item) => (
               <CarouselItem
                 key={item.id}

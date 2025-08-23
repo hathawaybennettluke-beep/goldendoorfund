@@ -114,34 +114,29 @@ const Footer = ({
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
             {/* Logo & Description */}
             <div className="space-y-4">
-              <div className="flex items-center gap-3">
-                <a href={logo.url} className="flex items-center gap-3 group">
+              <div className="flex items-center">
+                <a href={logo.url} className="group">
                   <img
                     src={logo.src}
                     alt={logo.alt}
                     title={logo.title}
-                    className="h-10 w-10 rounded-xl group-hover:scale-110 transition-transform duration-300 shadow-md"
+                    className="h-32 w-auto group-hover:scale-105 transition-transform duration-300"
                   />
-                  <div>
-                    <h2 className="text-xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
-                      {logo.title}
-                    </h2>
-                  </div>
                 </a>
               </div>
               
-              <p className="text-muted-foreground text-sm leading-relaxed max-w-xs">
+              <p className="text-muted-foreground text-lg leading-relaxed max-w-xs">
                 {description}
               </p>
               
               {/* Contact Info */}
               <div className="space-y-2">
-                <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                  <Mail className="h-3 w-3 text-primary" />
+                <div className="flex items-center gap-2 text-base text-muted-foreground">
+                  <Mail className="h-5 w-5 text-primary" />
                   <span>hello@goldendoor.org</span>
                 </div>
-                <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                  <Phone className="h-3 w-3 text-primary" />
+                <div className="flex items-center gap-2 text-base text-muted-foreground">
+                  <Phone className="h-5 w-5 text-primary" />
                   <span>+1 (555) 123-4567</span>
                 </div>
               </div>
@@ -150,7 +145,7 @@ const Footer = ({
             {/* Footer Links */}
             {sections.map((section, sectionIdx) => (
               <div key={sectionIdx} className="space-y-3">
-                <h3 className="text-sm font-semibold text-foreground border-b border-border/30 pb-1">
+                <h3 className="text-lg font-semibold text-foreground border-b border-border/30 pb-1">
                   {section.title}
                 </h3>
                 <ul className="space-y-2">
@@ -158,7 +153,7 @@ const Footer = ({
                     <li key={linkIdx}>
                       <a 
                         href={link.href}
-                        className="text-xs text-muted-foreground hover:text-primary transition-colors duration-300 hover:translate-x-1 inline-block transition-transform duration-300"
+                        className="text-base text-muted-foreground hover:text-primary transition-colors duration-300 hover:translate-x-1 inline-block transition-transform duration-300"
                       >
                         {link.name}
                       </a>
@@ -182,16 +177,16 @@ const Footer = ({
               <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-secondary/10 to-transparent rounded-full blur-xl" />
               
               <div className="relative z-10 text-center">
-                <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary border border-primary/20 mb-4">
-                  <Sparkles className="h-3 w-3" />
+                <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-base font-medium text-primary border border-primary/20 mb-4">
+                  <Sparkles className="h-5 w-5" />
                   Stay Updated
                 </div>
                 
-                <h3 className="text-xl font-bold mb-3 text-foreground">
+                <h3 className="text-3xl font-bold mb-3 text-foreground">
                   Get Impact Updates & Stories
                 </h3>
                 
-                <p className="text-muted-foreground mb-6 text-sm leading-relaxed">
+                <p className="text-muted-foreground mb-6 text-lg leading-relaxed">
                   Subscribe for campaign progress and impact stories.
                 </p>
                 
@@ -199,11 +194,11 @@ const Footer = ({
                   <input
                     type="email"
                     placeholder="Enter your email"
-                    className="flex-1 px-4 py-2 rounded-lg border border-border/50 bg-background/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all duration-300 text-foreground placeholder-muted-foreground text-sm"
+                    className="flex-1 px-4 py-3 rounded-lg border border-border/50 bg-background/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all duration-300 text-foreground placeholder-muted-foreground text-lg"
                   />
                   <Button 
                     size="sm"
-                    className="px-6 py-2 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-primary-foreground shadow-md hover:shadow-lg transition-all duration-300 font-medium"
+                    className="px-8 py-3 text-lg bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-primary-foreground shadow-md hover:shadow-lg transition-all duration-300 font-medium"
                   >
                     Subscribe
                   </Button>
@@ -217,17 +212,17 @@ const Footer = ({
         <div className="py-6 border-t border-border/50">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             {/* Copyright */}
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <div className="flex items-center gap-2 text-base text-muted-foreground">
               <span>{copyright}</span>
               <div className="flex items-center gap-1">
                 <span>Made with</span>
-                <Heart className="h-3 w-3 text-red-500 fill-red-500" />
+                <Heart className="h-5 w-5 text-red-500 fill-red-500" />
                 <span>for impact</span>
               </div>
             </div>
             
             {/* Legal Links */}
-            <ul className="flex items-center gap-4 text-xs text-muted-foreground">
+            <ul className="flex items-center gap-4 text-base text-muted-foreground">
               {legalLinks.map((link, idx) => (
                 <li key={idx}>
                   <a 
@@ -250,7 +245,7 @@ const Footer = ({
                 key={idx}
                 href={social.href}
                 aria-label={social.label}
-                className="group p-2 rounded-lg bg-muted/50 hover:bg-primary/10 transition-all duration-300 hover:scale-110 border border-border/50 hover:border-primary/30"
+                className="group p-3 rounded-lg bg-muted/50 hover:bg-primary/10 transition-all duration-300 hover:scale-110 border border-border/50 hover:border-primary/30"
               >
                 <div className="text-muted-foreground group-hover:text-primary transition-colors duration-300">
                   {social.icon}

@@ -144,7 +144,7 @@ export default function Home() {
         <Footer
           logo={{
             url: "/",
-            src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/logos/shadcnblockscom-icon.svg",
+            src: "/logo.png",
             alt: "DonateNow Logo",
             title: "DonateNow",
           }}
