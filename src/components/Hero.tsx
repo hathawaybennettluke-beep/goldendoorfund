@@ -118,21 +118,25 @@ const Hero = ({
             {/* Enhanced Trust Indicators */}
             <div className="mb-6 sm:mb-8 flex w-fit flex-col items-center gap-4 sm:gap-6 sm:flex-row animate-fade-in-up delay-300">
               {/* Avatar Stack */}
-              <div className="flex items-center gap-3 sm:gap-4">
-                <span className="inline-flex items-center -space-x-2 sm:-space-x-3">
+              <div className="flex items-center gap-6 sm:gap-8">
+                <div className="flex items-center">
                   {reviews.avatars.map((avatar, index) => (
                     <Avatar 
                       key={index} 
                       className="size-8 sm:size-10 lg:size-12 border-2 border-background shadow-lg ring-2 ring-primary/20 hover:scale-110 transition-transform duration-300"
-                      style={{ animationDelay: `${index * 100}ms` }}
+                      style={{ 
+                        animationDelay: `${index * 100}ms`,
+                        marginLeft: index === 0 ? '0' : '-4px',
+                        zIndex: reviews.avatars.length - index
+                      }}
                     >
                       <AvatarImage src={avatar.src} alt={avatar.alt} />
                     </Avatar>
                   ))}
-                </span>
+                </div>
                 
                 {/* Rating */}
-                <div className="text-left">
+                <div className="text-left ml-4 sm:ml-6">
                   <div className="flex items-center gap-2 mb-1">
                     <div className="flex items-center gap-1">
                       {[...Array(5)].map((_, index) => (
