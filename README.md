@@ -30,7 +30,7 @@ Donor Comments/Notes
 Blog or News Section
 – Share updates, stories, impact of donations
 
-About Us / Mission Page
+About Us or Mission Page
 – Editable by admin
 
 FAQs and Contact Page
