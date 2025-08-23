@@ -5,7 +5,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { HelpCircle, MessageCircle, Mail, Phone, Sparkles, ChevronDown } from "lucide-react";
+import { HelpCircle, MessageCircle, Mail, Phone, Sparkles } from "lucide-react";
 
 interface FaqItem {
   id: string;
@@ -143,7 +143,6 @@ const FAQ = ({
                       )}
                     </div>
                   </div>
-                  <ChevronDown className="h-5 w-5 text-muted-foreground transition-transform duration-300 shrink-0" />
                 </AccordionTrigger>
                 
                 <AccordionContent className="px-6 pb-6">
