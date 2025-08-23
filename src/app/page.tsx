@@ -13,8 +13,8 @@ import { Stats } from "@/components/Stats";
 
 export default function Home() {
   return (
-    <div className={`flex flex-col`}>
-      <div className="px-10 py-10">
+    <div className={`flex flex-col items-center`}>
+     
         <Hero
           heading="Make a Difference with Every Donation"
           description="Join thousands of donors making a positive impact worldwide. Support causes you care about with secure, transparent donations that create real change in communities."
@@ -55,9 +55,9 @@ export default function Home() {
             ],
           }}
         />
-      </div>
+ 
 
-      <div className="px-10">
+<div className="w-full flex flex-col items-center">
         <Stats
           heading="Our Impact in Numbers"
           description="Transparent reporting on how your donations create meaningful change"
@@ -88,21 +88,18 @@ export default function Home() {
             },
           ]}
         />
-      </div>
-
-      <div className="px-10">
+        </div>
+  <div className="w-full flex flex-col items-center">
         <CampaignShowcase />
-      </div>
-
-      <div className="px-10">
+        </div>
+        <div className="w-full flex flex-col items-center">
         <PaymentFeatures />
-      </div>
-
-      <div className="px-10">
+        </div>
+     
+        <div className="w-full flex flex-col items-center">
         <Gallery />
-      </div>
-
-      <div className="px-10">
+        </div>
+  <div className="w-full flex flex-col items-center">
         <FAQ
           heading="Frequently Asked Questions"
           description="Find answers to common questions about donating, campaigns, and how we ensure your contributions make an impact."
@@ -111,8 +108,8 @@ export default function Home() {
           supportButtonText="Contact Support"
           supportButtonUrl="/contact"
         />
-      </div>
-      <div className="px-10">
+  </div>
+  <div className="w-full flex flex-col items-center">
         <Blog7
           tagline="Impact Stories"
           heading="See Your Donations at Work"
@@ -120,8 +117,8 @@ export default function Home() {
           buttonText="Read all stories"
           buttonUrl="/stories"
         />
-      </div>
-      <div className="px-10">
+ </div>
+ <div className="w-full flex flex-col items-center">
         <Cta
           title="Ready to Make an Impact?"
           description="Join our community of donors and start making a difference today. Every donation, no matter the size, helps create positive change."
@@ -135,12 +132,12 @@ export default function Home() {
             "Transparent Fund Usage",
           ]}
         />
-      </div>
-
-      <div className="px-10">
+        </div>
+        <div className="w-full flex flex-col items-center">
         <Community />
-      </div>
-      <div className="px-10">
+        </div>
+    
+      
         <Footer
           logo={{
             url: "/",
@@ -186,6 +183,5 @@ export default function Home() {
           ]}
         />
       </div>
-    </div>
   );
 }

@@ -61,7 +61,7 @@ const Stats = ({
   ],
 }: StatsProps) => {
   return (
-    <section className="py-24 relative overflow-hidden">
+    <section className="py-24 px-10 relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-primary/5" />

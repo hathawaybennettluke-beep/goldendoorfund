@@ -89,7 +89,7 @@ const Footer = ({
   };
 
   return (
-    <footer className="relative overflow-hidden bg-gradient-to-br from-muted via-background to-muted/50 border-t border-border/50">
+    <footer className="bg-gradient-to-br w-full from-muted via-background to-muted/50 border-t border-border/50">
       {/* Enhanced Beautiful Background */}
       <div className="absolute inset-0 -z-10">
         {/* Main gradient overlay */}
