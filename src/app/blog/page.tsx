@@ -1,7 +1,18 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Search, Calendar, Clock, ArrowRight, Sparkles, Star, Filter, TrendingUp } from "lucide-react";
+import { 
+  Search,
+  Sparkles, 
+  Star, 
+  Filter, 
+  TrendingUp,
+  Clock,
+  Calendar,
+  User,
+  Tag,
+  ArrowRight
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {

@@ -13,8 +13,7 @@ import {
   Send,
   Sparkles,
   Star,
-  CheckCircle,
-  ArrowRight,
+  CheckCircle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -125,7 +124,7 @@ export default function ContactPage() {
             {/* Badge */}
             <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-6 py-3 text-sm font-semibold text-primary border border-primary/20 mb-8 shadow-lg backdrop-blur-sm">
               <MessageCircle className="h-4 w-4" />
-              We're Here to Help
+              We&apos;re Here to Help
             </div>
             
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-8 bg-gradient-to-r from-foreground via-foreground to-primary/80 bg-clip-text text-transparent leading-tight">

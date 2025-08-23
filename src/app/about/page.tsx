@@ -1,6 +1,6 @@
 "use client";
 
-import { Heart, Shield, Users, Globe, Target, Award, Sparkles, ArrowRight, CheckCircle, Star, PiggyBank, UserCheck, Trophy, ShieldCheck } from "lucide-react";
+import { Heart, Shield, Users, Globe, Target, Award, Sparkles, CheckCircle, Star, PiggyBank, UserCheck, Trophy, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Stats } from "@/components/Stats";

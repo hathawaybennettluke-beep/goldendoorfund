@@ -209,7 +209,7 @@ const FAQ = ({
         <div className="mt-16 text-center">
           <div className="inline-flex items-center gap-2 rounded-full bg-muted px-6 py-3 text-sm text-muted-foreground">
             <Sparkles className="h-4 w-4 text-primary" />
-            We're here to help you make the biggest possible impact
+            We&apos;re here to help you make the biggest possible impact
           </div>
         </div>
       </div>

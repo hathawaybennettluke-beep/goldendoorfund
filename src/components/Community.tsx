@@ -1,5 +1,5 @@
-import { ArrowUpRight, Sparkles, Heart, Users, Globe, Star, MessageCircle, Share2 } from "lucide-react";
-import { FaDiscord, FaLinkedin, FaXTwitter, FaInstagram, FaYoutube } from "react-icons/fa6";
+import { ArrowUpRight, Users, Star, Share2 } from "lucide-react";
+import { FaLinkedin, FaXTwitter, FaInstagram, FaYoutube } from "react-icons/fa6";
 import { Button } from "@/components/ui/button";
 
 const Community = () => {
@@ -40,15 +40,7 @@ const Community = () => {
       bgColor: "from-red-50 to-red-100",
       borderColor: "border-red-200",
     },
-    {
-      name: "Discord",
-      icon: <FaDiscord className="size-6" />,
-      description: "Join our community discussions and get real-time updates.",
-      url: "#",
-      color: "from-indigo-500 to-indigo-700",
-      bgColor: "from-indigo-50 to-indigo-100",
-      borderColor: "border-indigo-200",
-    },
+    
   ];
 
   const testimonials = [
@@ -130,7 +122,7 @@ const Community = () => {
                 {/* Content */}
                 <div className="relative mb-6">
                   <p className="text-muted-foreground leading-relaxed italic">
-                    "{testimonial.content}"
+                    &ldquo;{testimonial.content}&rdquo;
                   </p>
                 </div>
                 

@@ -3,23 +3,15 @@
 import { useState } from "react";
 import { 
   AlertTriangle, 
-  Heart, 
   Users, 
   Calendar, 
   MapPin, 
-  TrendingUp, 
-  Sparkles, 
-  Star,
   Filter,
   Search,
-  ArrowRight,
   Clock,
-  Globe,
-  Award,
   Flame,
   Shield,
-  Zap,
-  Truck
+  Zap
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -181,7 +173,6 @@ export default function EmergencyReliefPage() {
 
   const categories = Array.from(new Set(emergencyCampaigns.map(c => c.category)));
   const totalRaised = emergencyCampaigns.reduce((sum, c) => sum + c.raised, 0);
-  const totalGoal = emergencyCampaigns.reduce((sum, c) => sum + c.goal, 0);
   const totalBeneficiaries = emergencyCampaigns.reduce((sum, c) => sum + c.beneficiaries, 0);
 
   const getUrgencyColor = (urgency: string) => {

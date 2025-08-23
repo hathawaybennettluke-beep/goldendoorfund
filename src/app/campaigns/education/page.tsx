@@ -3,19 +3,12 @@
 import { useState } from "react";
 import { 
   BookOpen, 
-  Heart, 
   Users, 
   Calendar, 
   MapPin, 
-  TrendingUp, 
-  Sparkles, 
-  Star,
   Filter,
   Search,
-  ArrowRight,
   Clock,
-  Globe,
-  Award,
   GraduationCap,
   Lightbulb,
   School,
@@ -188,7 +181,6 @@ export default function EducationPage() {
 
   const categories = Array.from(new Set(educationCampaigns.map(c => c.category)));
   const totalRaised = educationCampaigns.reduce((sum, c) => sum + c.raised, 0);
-  const totalGoal = educationCampaigns.reduce((sum, c) => sum + c.goal, 0);
   const totalStudents = educationCampaigns.reduce((sum, c) => sum + c.students, 0);
 
   const getUrgencyColor = (urgency: string) => {

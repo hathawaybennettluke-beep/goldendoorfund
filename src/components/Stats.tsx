@@ -1,4 +1,4 @@
-import { ArrowRight, TrendingUp, Users, DollarSign, Target, CheckCircle, Sparkles, Heart, Globe, Award, HandHeart, Trophy, Shield, Star, PiggyBank, UserCheck, ShieldCheck } from "lucide-react";
+import { ArrowRight, TrendingUp, Users, Target, CheckCircle, Sparkles, Heart, Globe, HandHeart, Trophy, Shield, Star, PiggyBank, UserCheck, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface StatsProps {

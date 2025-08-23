@@ -11,9 +11,6 @@ import {
   AlertTriangle,
   BookOpen,
   Heart,
-  Building,
-  Shield,
-  BarChart3,
 } from "lucide-react";
 
 const geistSans = Geist({

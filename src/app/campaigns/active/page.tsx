@@ -7,15 +7,9 @@ import {
   Users, 
   Calendar, 
   MapPin, 
-  TrendingUp, 
-  Sparkles, 
-  Star,
   Filter,
   Search,
-  ArrowRight,
-  Clock,
-  Globe,
-  Award
+  Clock
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -163,7 +157,6 @@ export default function ActiveCampaignsPage() {
 
   const categories = Array.from(new Set(activeCampaigns.map(c => c.category)));
   const totalRaised = activeCampaigns.reduce((sum, c) => sum + c.raised, 0);
-  const totalGoal = activeCampaigns.reduce((sum, c) => sum + c.goal, 0);
   const totalDonors = activeCampaigns.reduce((sum, c) => sum + c.donors, 0);
 
   const getUrgencyColor = (urgency: string) => {
@@ -432,10 +425,9 @@ export default function ActiveCampaignsPage() {
       <section className="py-24 px-10 bg-gradient-to-br from-primary/5 to-primary/10">
         <div className="container">
           <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary border border-primary/20 mb-6">
-              <Sparkles className="h-4 w-4" />
-              Ready to Make an Impact?
-            </div>
+                          <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary border border-primary/20 mb-6">
+                Ready to Make an Impact?
+              </div>
             <h2 className="text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-r from-foreground to-primary/80 bg-clip-text text-transparent">
               Support These Active Campaigns
             </h2>

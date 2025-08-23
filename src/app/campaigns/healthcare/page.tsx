@@ -6,15 +6,9 @@ import {
   Users, 
   Calendar, 
   MapPin, 
-  TrendingUp, 
-  Sparkles, 
-  Star,
   Filter,
   Search,
-  ArrowRight,
   Clock,
-  Globe,
-  Award,
   Stethoscope,
   Pill,
   Activity,
@@ -188,7 +182,6 @@ export default function HealthcarePage() {
 
   const categories = Array.from(new Set(healthcareCampaigns.map(c => c.category)));
   const totalRaised = healthcareCampaigns.reduce((sum, c) => sum + c.raised, 0);
-  const totalGoal = healthcareCampaigns.reduce((sum, c) => sum + c.goal, 0);
   const totalPatients = healthcareCampaigns.reduce((sum, c) => sum + c.patients, 0);
 
   const getUrgencyColor = (urgency: string) => {
