@@ -70,15 +70,15 @@ const Navbar = ({
         <nav className="hidden justify-between lg:flex py-3">
           <div className="flex items-center gap-10">
             {/* Logo */}
-            <a href={logo.url} className="flex items-center gap-5 group ml-8">
+            <a href={logo.url} className="flex items-center gap-5 group ml-16">
               <Image
                 src={logo.src}
-                className="h-24 w-auto transition-transform duration-300 group-hover:scale-105"
+                className="h-28 w-auto transition-transform duration-300 group-hover:scale-105"
                 alt={logo.alt}
-                width={192}
-                height={120}
+                width={224}
+                height={140}
               />
-              <span className="text-3xl font-bold tracking-tighter bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+              <span className="text-4xl font-bold tracking-tighter bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
                 {logo.title}
               </span>
             </a>
@@ -182,7 +182,7 @@ const Navbar = ({
                       <a href={logo.url} className="flex items-center gap-3">
                         <img
                           src={logo.src}
-                          className="h-8 w-auto sm:h-10"
+                          className="h-10 w-auto sm:h-12"
                           alt={logo.alt}
                         />
                       </a>
