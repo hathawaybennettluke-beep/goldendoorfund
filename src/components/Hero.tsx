@@ -66,7 +66,7 @@ const Hero = ({
   },
 }: HeroProps) => {
   return (
-    <section className="relative overflow-hidden">
+    <section className="relative overflow-hidden pt-16">
       {/* Background Elements */}
       <div className="absolute inset-0 -z-10">
         {/* Gradient Background */}
@@ -190,8 +190,8 @@ const Hero = ({
             {/* Main Image */}
             <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-card to-card/80 shadow-2xl">
               <img
-                src="https://deifkwefumgah.cloudfront.net/shadcnblocks/block/placeholder-1.svg"
-                alt="Hero illustration"
+                src="https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80"
+                alt="People working together for community impact"
                 className="max-h-[600px] w-full object-cover lg:max-h-[700px]"
               />
               

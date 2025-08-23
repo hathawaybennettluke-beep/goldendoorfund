@@ -10,6 +10,7 @@ import { Hero } from "@/components/Hero";
 import { InvertedSection } from "@/components/InvertedTheme";
 import { PaymentFeatures } from "@/components/PaymentFeatures";
 import { Stats } from "@/components/Stats";
+import { PiggyBank, UserCheck, Trophy, ShieldCheck } from "lucide-react";
 
 export default function Home() {
   return (
@@ -70,21 +71,25 @@ export default function Home() {
               id: "total-raised",
               value: "$2.8M+",
               label: "total funds raised for causes worldwide",
+              icon: <PiggyBank className="h-12 w-12" />,
             },
             {
               id: "active-donors",
               value: "15,000+",
               label: "active donors supporting campaigns",
+              icon: <UserCheck className="h-12 w-12" />,
             },
             {
               id: "campaigns-funded",
               value: "450+",
               label: "successful campaigns completed",
+              icon: <Trophy className="h-12 w-12" />,
             },
             {
               id: "success-rate",
               value: "98.5%",
               label: "of donations reach their intended recipients",
+              icon: <ShieldCheck className="h-12 w-12" />,
             },
           ]}
         />

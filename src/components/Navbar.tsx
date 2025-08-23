@@ -1,5 +1,6 @@
 "use client";
-import { Menu } from "lucide-react";
+import { Menu, ChevronDown } from "lucide-react";
+import { useState } from "react";
 
 import {
   Accordion,
@@ -9,14 +10,6 @@ import {
 } from "@/components/ui/accordion";
 import { AuthButtons } from "@/components/ui/auth-buttons";
 import { Button } from "@/components/ui/button";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
 import {
   Sheet,
   SheetContent,
@@ -64,39 +57,96 @@ const Navbar = ({
   },
 }: NavbarProps) => {
   const isAdminRoute = usePathname().includes("/admin");
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
   if (isAdminRoute) {
     return null;
   }
 
   return (
-    <section className="py-4">
-      <div className="container overflow-visible">
+    <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container">
         {/* Desktop Menu */}
-        <nav className="hidden justify-between lg:flex">
-          <div className="flex items-center gap-6">
+        <nav className="hidden justify-between lg:flex py-3">
+          <div className="flex items-center gap-10">
             {/* Logo */}
-            <a href={logo.url} className="flex items-center gap-2">
+            <a href={logo.url} className="flex items-center gap-5 group ml-8">
               <Image
                 src={logo.src}
-                className=""
+                className="h-24 w-auto transition-transform duration-300 group-hover:scale-105"
                 alt={logo.alt}
-                width={160}
-                height={100}
+                width={192}
+                height={120}
               />
-              <span className="text-lg font-semibold tracking-tighter">
+              <span className="text-3xl font-bold tracking-tighter bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
                 {logo.title}
               </span>
             </a>
-            <div className="flex items-center">
-              <NavigationMenu>
-                <NavigationMenuList>
-                  {menu.map((item) => renderMenuItem(item))}
-                </NavigationMenuList>
-              </NavigationMenu>
+            
+            {/* Navigation Menu */}
+            <div className="flex items-center gap-4">
+              {menu.map((item) => (
+                <div key={item.title} className="relative">
+                  {item.items ? (
+                    <div>
+                      <button
+                        className="group px-4 py-2 text-xl font-medium text-foreground hover:text-primary hover:bg-primary/10 rounded-lg transition-all duration-300 flex items-center gap-2"
+                        onClick={() => setOpenDropdown(openDropdown === item.title ? null : item.title)}
+                        onMouseEnter={() => setOpenDropdown(item.title)}
+                      >
+                        {item.title}
+                        <ChevronDown className={`h-5 w-5 transition-transform duration-200 ${openDropdown === item.title ? 'rotate-180' : ''}`} />
+                      </button>
+                      
+                      {/* Dropdown Menu */}
+                      {openDropdown === item.title && (
+                        <div 
+                          className="absolute top-full left-0 mt-2 w-[500px] bg-background/95 backdrop-blur border border-border/50 shadow-xl rounded-xl z-50"
+                          onMouseEnter={() => setOpenDropdown(item.title)}
+                          onMouseLeave={() => setOpenDropdown(null)}
+                        >
+                          <div className="grid grid-cols-1 gap-2 p-6">
+                            {item.items.map((subItem) => (
+                              <a
+                                key={subItem.title}
+                                href={subItem.url}
+                                className="group flex select-none flex-row gap-4 rounded-lg p-4 leading-none no-underline outline-none transition-all duration-300 hover:bg-primary/10 hover:text-primary"
+                                onClick={() => setOpenDropdown(null)}
+                              >
+                                <div className="text-foreground group-hover:text-primary transition-colors duration-300">
+                                  {subItem.icon}
+                                </div>
+                                <div>
+                                  <div className="text-base font-semibold group-hover:text-primary transition-colors duration-300">
+                                    {subItem.title}
+                                  </div>
+                                  {subItem.description && (
+                                    <p className="text-muted-foreground text-sm leading-snug group-hover:text-foreground transition-colors duration-300">
+                                      {subItem.description}
+                                    </p>
+                                  )}
+                                </div>
+                              </a>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <a
+                      href={item.url}
+                      className="group inline-flex h-10 w-max items-center justify-center rounded-lg px-4 py-2 text-xl font-medium text-foreground hover:text-primary hover:bg-primary/10 transition-all duration-300"
+                    >
+                      {item.title}
+                    </a>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          
+          {/* Auth Buttons */}
+          <div className="flex items-center gap-4">
             <AuthButtons
               loginUrl={auth.login.url}
               signupUrl={auth.signup.url}
@@ -108,35 +158,37 @@ const Navbar = ({
 
         {/* Mobile Menu */}
         <div className="block lg:hidden">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between py-3">
             {/* Logo */}
-            <a href={logo.url} className="flex items-center gap-2">
+            <a href={logo.url} className="flex items-center gap-4 ml-6">
               <img
                 src={logo.src}
-                className="max-h-8"
+                className="h-20 w-auto"
                 alt={logo.alt}
               />
             </a>
-            <div className="flex gap-2">
+            
+            {/* Mobile Menu Button */}
+            <div className="flex gap-3">
               <Sheet>
                 <SheetTrigger asChild>
-                  <Button variant="outline" size="icon">
-                    <Menu className="size-4" />
+                  <Button variant="outline" size="icon" className="border-border/50 h-12 w-12">
+                    <Menu className="size-5" />
                   </Button>
                 </SheetTrigger>
                 <SheetContent className="overflow-y-auto">
                   <SheetHeader>
                     <SheetTitle>
-                      <a href={logo.url} className="flex items-center gap-2">
+                      <a href={logo.url} className="flex items-center gap-3">
                         <img
                           src={logo.src}
-                          className="max-h-8"
+                          className="h-10 w-auto"
                           alt={logo.alt}
                         />
                       </a>
                     </SheetTitle>
                   </SheetHeader>
-                  <div className="flex flex-col gap-6 p-4">
+                  <div className="flex flex-col gap-6 p-6">
                     <Accordion
                       type="single"
                       collapsible
@@ -159,58 +211,34 @@ const Navbar = ({
           </div>
         </div>
       </div>
-    </section>
-  );
-};
-
-const renderMenuItem = (item: MenuItem) => {
-  if (item.items) {
-    return (
-      <NavigationMenuItem key={item.title}>
-        <NavigationMenuTrigger>{item.title}</NavigationMenuTrigger>
-        <NavigationMenuContent className="!w-[500px] min-w-[500px] bg-background border shadow-lg">
-          <div className="grid grid-cols-1 gap-1 p-4">
-            {item.items.map((subItem) => (
-              <NavigationMenuLink asChild key={subItem.title}>
-                <SubMenuLink item={subItem} />
-              </NavigationMenuLink>
-            ))}
-          </div>
-        </NavigationMenuContent>
-      </NavigationMenuItem>
-    );
-  }
-
-  return (
-    <NavigationMenuItem key={item.title}>
-      <NavigationMenuLink
-        href={item.url}
-        className="bg-background hover:bg-muted hover:text-accent-foreground group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors"
-      >
-        {item.title}
-      </NavigationMenuLink>
-    </NavigationMenuItem>
+    </header>
   );
 };
 
 const renderMobileMenuItem = (item: MenuItem) => {
   if (item.items) {
     return (
-      <AccordionItem key={item.title} value={item.title} className="border-b-0">
-        <AccordionTrigger className="text-md py-0 font-semibold hover:no-underline">
+      <AccordionItem key={item.title} value={item.title} className="border-b border-border/30">
+        <AccordionTrigger className="text-lg py-4 font-semibold hover:no-underline hover:text-primary transition-colors">
           {item.title}
         </AccordionTrigger>
         <AccordionContent className="mt-2">
-          {item.items.map((subItem) => (
-            <SubMenuLink key={subItem.title} item={subItem} />
-          ))}
+          <div className="space-y-2">
+            {item.items.map((subItem) => (
+              <SubMenuLink key={subItem.title} item={subItem} />
+            ))}
+          </div>
         </AccordionContent>
       </AccordionItem>
     );
   }
 
   return (
-    <a key={item.title} href={item.url} className="text-md font-semibold">
+    <a 
+      key={item.title} 
+      href={item.url} 
+      className="block py-4 text-lg font-semibold text-foreground hover:text-primary transition-colors border-b border-border/30"
+    >
       {item.title}
     </a>
   );
@@ -219,14 +247,18 @@ const renderMobileMenuItem = (item: MenuItem) => {
 const SubMenuLink = ({ item }: { item: MenuItem }) => {
   return (
     <a
-      className="hover:bg-muted hover:text-accent-foreground flex select-none flex-row gap-4 rounded-md p-3 leading-none no-underline outline-none transition-colors"
+      className="group flex select-none flex-row gap-4 rounded-lg p-4 leading-none no-underline outline-none transition-all duration-300 hover:bg-primary/10 hover:text-primary"
       href={item.url}
     >
-      <div className="text-foreground">{item.icon}</div>
+      <div className="text-foreground group-hover:text-primary transition-colors duration-300">
+        {item.icon}
+      </div>
       <div>
-        <div className="text-sm font-semibold">{item.title}</div>
+        <div className="text-sm font-semibold group-hover:text-primary transition-colors duration-300">
+          {item.title}
+        </div>
         {item.description && (
-          <p className="text-muted-foreground text-sm leading-snug">
+          <p className="text-muted-foreground text-sm leading-snug group-hover:text-foreground transition-colors duration-300">
             {item.description}
           </p>
         )}

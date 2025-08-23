@@ -27,7 +27,7 @@ const defaultCampaigns: Campaign[] = [
     description:
       "Providing clean, safe drinking water to remote villages in East Africa. Each well serves 500+ people and includes maintenance training for local communities.",
     image:
-      "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/placeholder-1.svg",
+      "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
     raised: 45000,
     goal: 75000,
     donors: 234,
@@ -40,7 +40,7 @@ const defaultCampaigns: Campaign[] = [
     description:
       "Ensuring every child has access to basic educational materials and books for the upcoming school year. Supporting 500+ students across 10 schools.",
     image:
-      "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/placeholder-1.svg",
+      "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2022&q=80",
     raised: 28000,
     goal: 40000,
     donors: 156,
@@ -53,7 +53,7 @@ const defaultCampaigns: Campaign[] = [
     description:
       "Bringing essential healthcare services to communities without access to medical facilities. Includes equipment, staff training, and transportation.",
     image:
-      "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/placeholder-1.svg",
+      "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
     raised: 62000,
     goal: 100000,
     donors: 389,

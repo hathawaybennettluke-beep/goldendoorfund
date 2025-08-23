@@ -55,21 +55,21 @@ const Community = () => {
     {
       name: "Sarah Johnson",
       role: "Monthly Donor",
-      avatar: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-1.webp",
+      avatar: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
       content: "I've been donating monthly for 2 years and love seeing the real-time updates on how my contributions are making a difference.",
       rating: 5,
     },
     {
       name: "Michael Chen",
       role: "Campaign Supporter",
-      avatar: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-2.webp",
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80",
       content: "The transparency and impact tracking are incredible. I can see exactly where my donations go and the results they achieve.",
       rating: 5,
     },
     {
       name: "Emily Rodriguez",
       role: "Volunteer",
-      avatar: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-3.webp",
+      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
       content: "Being part of this community has shown me the power of collective action. Every donation truly makes a difference.",
       rating: 5,
     },
@@ -218,43 +218,6 @@ const Community = () => {
             <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-green-500/10 to-green-500/5 border border-green-200">
               <div className="text-3xl font-bold text-green-600 mb-2">24/7</div>
               <div className="text-sm text-muted-foreground">Support Available</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Newsletter Signup */}
-        <div className="text-center">
-          <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-card to-card/80 p-12 shadow-xl">
-            {/* Background Pattern */}
-            <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(0,0,0,0.02)_25%,rgba(0,0,0,0.02)_75%,transparent_75%)] bg-[size:25px_25px]" />
-            
-            <div className="relative z-10">
-              <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary border border-primary/20 mb-6">
-                <MessageCircle className="h-4 w-4" />
-                Stay Connected
-              </div>
-              
-              <h3 className="mb-4 text-3xl font-bold md:text-4xl">
-                Get Impact Updates & Stories
-              </h3>
-              
-              <p className="mb-8 text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-                Subscribe to our newsletter for regular updates on campaign progress, impact stories, and ways to get involved.
-              </p>
-              
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="flex-1 px-4 py-3 rounded-xl border border-border/50 bg-background/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all duration-300"
-                />
-                <Button 
-                  size="lg"
-                  className="px-8 py-3 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-lg hover:shadow-xl transition-all duration-300"
-                >
-                  Subscribe
-                </Button>
-              </div>
             </div>
           </div>
         </div>
