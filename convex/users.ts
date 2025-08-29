@@ -161,6 +161,7 @@ export const syncUserFromClerk = mutation({
     name: v.string(),
     email: v.string(),
     profileImage: v.optional(v.string()),
+    role: v.optional(v.union(v.literal("admin"), v.literal("user"))),
   },
   handler: async (ctx, args) => {
     // First check if user with this Clerk ID already exists
@@ -218,6 +219,7 @@ export const syncUserFromClerk = mutation({
       email: args.email,
       profileImage: args.profileImage,
       clerkUserId: args.clerkUserId,
+      role: args.role,
       createdAt: Date.now(),
     });
 
@@ -281,6 +283,42 @@ export const updateUser = mutation({
 
     await ctx.db.patch(userId, cleanUpdates);
     return userId;
+  },
+});
+
+export const updateCurrentUser = mutation({
+  args: {
+    name: v.optional(v.string()),
+    profileImage: v.optional(v.id("_storage")),
+    phoneNumber: v.optional(v.string()),
+    location: v.optional(v.string()),
+    bio: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error("User not authenticated");
+    }
+
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_email", (q) => q.eq("email", identity.email!))
+      .first();
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    // update the user with the new data
+    const updatedUser = await ctx.db.patch(user._id, {
+      name: args.name,
+      profileImage: args.profileImage,
+      phoneNumber: args.phoneNumber,
+      location: args.location,
+      bio: args.bio,
+    });
+
+    return updatedUser;
   },
 });
 

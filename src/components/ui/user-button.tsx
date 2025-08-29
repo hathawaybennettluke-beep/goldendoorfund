@@ -12,24 +12,29 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useQuery } from "convex/react";
+import { api } from "../../../convex/_generated/api";
 
 export function UserButton() {
-  const { user } = useUser();
+  const user = useQuery(api.users.getCurrentUser);
   const { signOut } = useClerk();
 
   if (!user) return null;
 
   const initials =
-    user.firstName && user.lastName
-      ? `${user.firstName[0]}${user.lastName[0]}`
-      : user.emailAddresses[0]?.emailAddress[0].toUpperCase() || "U";
+    user.name && user.name
+      ? `${user.name[0]}${user.name[0]}`
+      : user.email[0].toUpperCase() || "U";
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-10 w-10 rounded-full">
           <Avatar className="h-10 w-10">
-            <AvatarImage src={user.imageUrl} alt={user.fullName || "User"} />
+            <AvatarImage
+              src={user.profileImage || ""}
+              alt={user.name || "User"}
+            />
             <AvatarFallback>{initials}</AvatarFallback>
           </Avatar>
         </Button>
@@ -38,10 +43,10 @@ export function UserButton() {
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none">
-              {user.fullName || "User"}
+              {user.name || "User"}
             </p>
             <p className="text-xs leading-none text-muted-foreground">
-              {user.emailAddresses[0]?.emailAddress}
+              {user.email}
             </p>
           </div>
         </DropdownMenuLabel>

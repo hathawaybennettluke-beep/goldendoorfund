@@ -67,7 +67,7 @@ const Navbar = ({
     <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container">
         {/* Desktop Menu */}
-        <nav className="hidden justify-between lg:flex py-3">
+        <nav className="hidden justify-between items-center lg:flex py-3">
           <div className="flex items-center gap-10">
             {/* Logo */}
             <a href={logo.url} className="flex items-center gap-5 group ml-16">
@@ -82,7 +82,7 @@ const Navbar = ({
                 {logo.title}
               </span>
             </a>
-            
+
             {/* Navigation Menu */}
             <div className="flex items-center gap-4">
               {menu.map((item) => (
@@ -91,16 +91,22 @@ const Navbar = ({
                     <div>
                       <button
                         className="group px-4 py-2 text-xl font-medium text-foreground hover:text-primary hover:bg-primary/10 rounded-lg transition-all duration-300 flex items-center gap-2"
-                        onClick={() => setOpenDropdown(openDropdown === item.title ? null : item.title)}
+                        onClick={() =>
+                          setOpenDropdown(
+                            openDropdown === item.title ? null : item.title
+                          )
+                        }
                         onMouseEnter={() => setOpenDropdown(item.title)}
                       >
                         {item.title}
-                        <ChevronDown className={`h-5 w-5 transition-transform duration-200 ${openDropdown === item.title ? 'rotate-180' : ''}`} />
+                        <ChevronDown
+                          className={`h-5 w-5 transition-transform duration-200 ${openDropdown === item.title ? "rotate-180" : ""}`}
+                        />
                       </button>
-                      
+
                       {/* Dropdown Menu */}
                       {openDropdown === item.title && (
-                        <div 
+                        <div
                           className="absolute top-full left-0 mt-2 w-[500px] bg-background/95 backdrop-blur border border-border/50 shadow-xl rounded-xl z-50"
                           onMouseEnter={() => setOpenDropdown(item.title)}
                           onMouseLeave={() => setOpenDropdown(null)}
@@ -144,7 +150,7 @@ const Navbar = ({
               ))}
             </div>
           </div>
-          
+
           {/* Auth Buttons */}
           <div className="flex items-center gap-4">
             <AuthButtons
@@ -160,19 +166,26 @@ const Navbar = ({
         <div className="block lg:hidden">
           <div className="flex items-center justify-between py-3 px-4 sm:px-6">
             {/* Logo */}
-            <a href={logo.url} className="flex items-center gap-3 sm:gap-4 ml-2 sm:ml-6">
+            <a
+              href={logo.url}
+              className="flex items-center gap-3 sm:gap-4 ml-2 sm:ml-6"
+            >
               <img
                 src={logo.src}
                 className="h-16 w-auto sm:h-20"
                 alt={logo.alt}
               />
             </a>
-            
+
             {/* Mobile Menu Button */}
             <div className="flex gap-2 sm:gap-3">
               <Sheet>
                 <SheetTrigger asChild>
-                  <Button variant="outline" size="icon" className="border-border/50 h-10 w-10 sm:h-12 sm:w-12">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="border-border/50 h-10 w-10 sm:h-12 sm:w-12"
+                  >
                     <Menu className="size-4 sm:size-5" />
                   </Button>
                 </SheetTrigger>
@@ -218,7 +231,11 @@ const Navbar = ({
 const renderMobileMenuItem = (item: MenuItem) => {
   if (item.items) {
     return (
-      <AccordionItem key={item.title} value={item.title} className="border-b border-border/30">
+      <AccordionItem
+        key={item.title}
+        value={item.title}
+        className="border-b border-border/30"
+      >
         <AccordionTrigger className="text-base sm:text-lg py-3 sm:py-4 font-semibold hover:no-underline hover:text-primary transition-colors">
           {item.title}
         </AccordionTrigger>
@@ -234,9 +251,9 @@ const renderMobileMenuItem = (item: MenuItem) => {
   }
 
   return (
-    <a 
-      key={item.title} 
-      href={item.url} 
+    <a
+      key={item.title}
+      href={item.url}
       className="block py-3 sm:py-4 text-base sm:text-lg font-semibold text-foreground hover:text-primary transition-colors border-b border-border/30"
     >
       {item.title}

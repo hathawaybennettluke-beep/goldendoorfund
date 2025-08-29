@@ -1,6 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useQuery } from "convex/react";
+import { api } from "../../../../convex/_generated/api";
+import { Id } from "../../../../convex/_generated/dataModel";
+import { useUser } from "@clerk/nextjs";
+import { usePayment } from "@/hooks/usePayment";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 import {
   Heart,
   Share2,
@@ -13,100 +20,87 @@ import {
   CheckCircle,
   ArrowLeft,
   DollarSign,
+  AlertCircle,
+  CheckCircle2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
+import DonationForm from "@/components/DonationForm"; // We'll create this component
+import Image from "next/image";
 
-// Mock data - in a real app, this would come from your database
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const mockCampaignDetails: { [key: string]: any } = {
-  "1": {
-    id: "1",
-    title: "Emergency Water Wells for Rural Communities",
-    description:
-      "Providing clean, safe drinking water to remote villages in East Africa. Each well serves 500+ people and includes maintenance training for local communities.",
-    fullDescription: `
-      <p>Access to clean water is a fundamental human right, yet millions of people in rural East Africa continue to lack this basic necessity. Our Emergency Water Wells project aims to change this reality by drilling deep wells in underserved communities.</p>
-      
-      <h3>The Problem</h3>
-      <p>In remote villages across East Africa, families often walk hours daily to collect water from contaminated sources. This leads to:</p>
-      <ul>
-        <li>Water-borne diseases affecting entire communities</li>
-        <li>Children missing school to help with water collection</li>
-        <li>Women spending up to 6 hours daily walking to water sources</li>
-        <li>Limited agricultural and economic development</li>
-      </ul>
-      
-      <h3>Our Solution</h3>
-      <p>Each well we drill will:</p>
-      <ul>
-        <li>Serve 500+ community members with clean, safe water</li>
-        <li>Include solar-powered pumping systems for reliability</li>
-        <li>Provide comprehensive maintenance training to local technicians</li>
-        <li>Establish community water committees for long-term sustainability</li>
-      </ul>
-      
-      <h3>Impact Timeline</h3>
-      <p>Phase 1 (Months 1-3): Site assessment and community engagement<br/>
-      Phase 2 (Months 4-8): Well drilling and infrastructure setup<br/>
-      Phase 3 (Months 9-12): Training programs and sustainability measures</p>
-    `,
-    image:
-      "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/placeholder-1.svg",
-    raised: 45000,
-    goal: 75000,
-    donors: 234,
-    category: "Water & Sanitation",
-    location: "East Africa",
-    status: "active",
-    urgency: "high",
-    endDate: "2024-12-15",
-    organizationName: "Water for Life Foundation",
-    organizationVerified: true,
-    updates: [
-      {
-        id: 1,
-        date: "2024-10-15",
-        title: "Site Assessment Complete",
-        content:
-          "We've completed our assessment of 12 potential well sites across 6 villages. Community leaders have been engaged and are excited about the project.",
-        images: [
-          "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/placeholder-1.svg",
-        ],
-      },
-      {
-        id: 2,
-        date: "2024-09-30",
-        title: "Project Launch",
-        content:
-          "Thanks to your generous support, we're officially launching the Emergency Water Wells project. Our team is now on the ground conducting initial surveys.",
-        images: [],
-      },
-    ],
-    recentDonations: [
-      { name: "Sarah M.", amount: 500, time: "2 hours ago", anonymous: false },
-      { name: "Anonymous", amount: 100, time: "5 hours ago", anonymous: true },
-      { name: "Michael K.", amount: 250, time: "1 day ago", anonymous: false },
-      { name: "Anonymous", amount: 75, time: "2 days ago", anonymous: true },
-      { name: "Emma L.", amount: 150, time: "3 days ago", anonymous: false },
-    ],
-  },
-  // Add more campaign details as needed
+// Load Stripe
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
+);
+
+// For now, we'll use a placeholder image for campaigns without images
+const getCampaignImage = (imageUrl?: string) => {
+  return (
+    imageUrl ||
+    "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/placeholder-1.svg"
+  );
 };
 
 export default function CampaignDetailPage() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const campaignId = params.id as string;
+  const { user } = useUser();
+  const { toast, toasts } = useToast();
+
   const [donationAmount, setDonationAmount] = useState("");
   const [donationMessage, setDonationMessage] = useState("");
   const [isAnonymous, setIsAnonymous] = useState(false);
+  const [showPaymentForm, setShowPaymentForm] = useState(false);
 
-  const campaign = mockCampaignDetails[campaignId];
+  // Fetch campaign data from Convex
+  const campaign = useQuery(api.campaigns.get, {
+    id: campaignId as Id<"campaigns">,
+  });
 
-  if (!campaign) {
+  // Fetch recent donations
+  const recentDonations = useQuery(api.payments.getRecentDonations, {
+    campaignId: campaignId as Id<"campaigns">,
+    limit: 5,
+  });
+
+  // Handle payment status from URL params
+  useEffect(() => {
+    const paymentStatus = searchParams.get("payment");
+    if (paymentStatus === "success") {
+      toast({
+        title: "Donation Successful!",
+        description: "Thank you for your generous donation.",
+        type: "success",
+      });
+      // Reset form
+      setDonationAmount("");
+      setDonationMessage("");
+      setIsAnonymous(false);
+      setShowPaymentForm(false);
+    } else if (paymentStatus === "canceled") {
+      toast({
+        title: "Donation Canceled",
+        description: "Your donation was not completed.",
+        type: "info",
+      });
+    }
+  }, [searchParams, toast]);
+
+  if (campaign === undefined) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-4"></div>
+        <p className="text-muted-foreground">Loading campaign...</p>
+      </div>
+    );
+  }
+
+  if (campaign === null) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
         <h1 className="text-2xl font-bold mb-4">Campaign Not Found</h1>
@@ -148,8 +142,58 @@ export default function CampaignDetailPage() {
 
   const predefinedAmounts = [25, 50, 100, 250, 500];
 
+  const handleDonateClick = () => {
+    if (!user) {
+      toast({
+        title: "Please Sign In",
+        description: "You need to be signed in to make a donation.",
+        type: "error",
+      });
+      return;
+    }
+
+    const amount = parseFloat(donationAmount);
+    if (isNaN(amount) || amount <= 0) {
+      toast({
+        title: "Invalid Amount",
+        description: "Please enter a valid donation amount.",
+        type: "error",
+      });
+      return;
+    }
+
+    setShowPaymentForm(true);
+  };
+
   return (
     <div className="flex flex-col">
+      {/* Toast Notifications */}
+      <div className="fixed top-4 right-4 z-50 space-y-2">
+        {toasts.map((toast) => (
+          <div
+            key={toast.id}
+            className={`p-4 rounded-lg shadow-lg max-w-sm ${
+              toast.type === "success"
+                ? "bg-green-500 text-white"
+                : toast.type === "error"
+                  ? "bg-red-500 text-white"
+                  : "bg-blue-500 text-white"
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              {toast.type === "success" && <CheckCircle2 className="h-4 w-4" />}
+              {toast.type === "error" && <AlertCircle className="h-4 w-4" />}
+              <div>
+                <p className="font-medium">{toast.title}</p>
+                {toast.description && (
+                  <p className="text-sm opacity-90">{toast.description}</p>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
       {/* Back Navigation */}
       <div className="py-4 px-10 border-b">
         <div className="container">
@@ -171,8 +215,10 @@ export default function CampaignDetailPage() {
             <div className="lg:col-span-2">
               {/* Campaign Image */}
               <div className="relative mb-8">
-                <img
-                  src={campaign.image}
+                <Image
+                  width={400}
+                  height={400}
+                  src={getCampaignImage(campaign.imageUrl)}
                   alt={campaign.title}
                   className="w-full h-[400px] object-cover rounded-lg"
                 />
@@ -199,12 +245,7 @@ export default function CampaignDetailPage() {
                     <div className="flex items-center gap-4 text-muted-foreground mb-4">
                       <div className="flex items-center gap-1">
                         <Shield className="h-4 w-4" />
-                        <span className="text-sm">
-                          {campaign.organizationName}
-                        </span>
-                        {campaign.organizationVerified && (
-                          <CheckCircle className="h-4 w-4 text-green-600" />
-                        )}
+                        <span className="text-sm">{campaign.organization}</span>
                       </div>
                       <div className="flex items-center gap-1">
                         <MapPin className="h-4 w-4" />
@@ -228,17 +269,17 @@ export default function CampaignDetailPage() {
                 <div className="mb-6">
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-2xl font-bold">
-                      {formatCurrency(campaign.raised)}
+                      {formatCurrency(campaign.currentAmount)}
                     </span>
                     <span className="text-muted-foreground">
-                      of {formatCurrency(campaign.goal)} goal
+                      of {formatCurrency(campaign.goalAmount)} goal
                     </span>
                   </div>
                   <div className="h-3 w-full rounded-full bg-gray-200 mb-4">
                     <div
                       className="h-3 rounded-full bg-primary transition-all duration-300"
                       style={{
-                        width: `${getProgressPercentage(campaign.raised, campaign.goal)}%`,
+                        width: `${getProgressPercentage(campaign.currentAmount, campaign.goalAmount)}%`,
                       }}
                     />
                   </div>
@@ -248,9 +289,7 @@ export default function CampaignDetailPage() {
                         <Users className="h-4 w-4" />
                         <span className="text-sm">Donors</span>
                       </div>
-                      <span className="text-xl font-semibold">
-                        {campaign.donors}
-                      </span>
+                      <span className="text-xl font-semibold">0</span>
                     </div>
                     <div>
                       <div className="flex items-center justify-center gap-1 text-muted-foreground mb-1">
@@ -259,7 +298,10 @@ export default function CampaignDetailPage() {
                       </div>
                       <span className="text-xl font-semibold">
                         {Math.round(
-                          getProgressPercentage(campaign.raised, campaign.goal)
+                          getProgressPercentage(
+                            campaign.currentAmount,
+                            campaign.goalAmount
+                          )
                         )}
                         %
                       </span>
@@ -287,44 +329,8 @@ export default function CampaignDetailPage() {
               {/* Campaign Description */}
               <div className="mb-8">
                 <h2 className="text-2xl font-bold mb-4">About This Campaign</h2>
-                <div
-                  className="prose prose-gray max-w-none"
-                  dangerouslySetInnerHTML={{ __html: campaign.fullDescription }}
-                />
-              </div>
-
-              {/* Updates */}
-              <div className="mb-8">
-                <h2 className="text-2xl font-bold mb-6">Updates</h2>
-                <div className="space-y-6">
-                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                  {campaign.updates.map((update: any) => (
-                    <div key={update.id} className="border rounded-lg p-6">
-                      <div className="flex items-center gap-2 mb-3">
-                        <span className="text-sm text-muted-foreground">
-                          {new Date(update.date).toLocaleDateString()}
-                        </span>
-                      </div>
-                      <h3 className="text-xl font-semibold mb-3">
-                        {update.title}
-                      </h3>
-                      <p className="text-muted-foreground mb-4">
-                        {update.content}
-                      </p>
-                      {update.images.length > 0 && (
-                        <div className="grid grid-cols-2 gap-4">
-                          {update.images.map((image: string, index: number) => (
-                            <img
-                              key={index}
-                              src={image}
-                              alt={`Update ${index + 1}`}
-                              className="rounded-lg h-32 w-full object-cover"
-                            />
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  ))}
+                <div className="prose prose-gray max-w-none">
+                  <p>{campaign.description}</p>
                 </div>
               </div>
             </div>
@@ -336,71 +342,148 @@ export default function CampaignDetailPage() {
                 <div className="bg-card border rounded-lg p-6 mb-6">
                   <h3 className="text-xl font-bold mb-4">Make a Donation</h3>
 
-                  {/* Predefined Amounts */}
-                  <div className="grid grid-cols-3 gap-2 mb-4">
-                    {predefinedAmounts.map((amount) => (
+                  {!showPaymentForm ? (
+                    <>
+                      {/* Predefined Amounts */}
+                      <div className="grid grid-cols-3 gap-2 mb-4">
+                        {predefinedAmounts.map((amount) => (
+                          <Button
+                            key={amount}
+                            variant={
+                              donationAmount === amount.toString()
+                                ? "default"
+                                : "outline"
+                            }
+                            size="sm"
+                            onClick={() => setDonationAmount(amount.toString())}
+                          >
+                            ${amount}
+                          </Button>
+                        ))}
+                      </div>
+
+                      {/* Custom Amount */}
+                      <div className="mb-4">
+                        <label className="block text-sm font-medium mb-2">
+                          Custom Amount
+                        </label>
+                        <div className="relative">
+                          <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                          <Input
+                            type="number"
+                            placeholder="Enter amount"
+                            value={donationAmount}
+                            onChange={(e) => setDonationAmount(e.target.value)}
+                            className="pl-10"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Message */}
+                      <div className="mb-4">
+                        <label className="block text-sm font-medium mb-2">
+                          Message (Optional)
+                        </label>
+                        <Textarea
+                          placeholder="Leave a message of support..."
+                          value={donationMessage}
+                          onChange={(e) => setDonationMessage(e.target.value)}
+                          rows={3}
+                        />
+                      </div>
+
+                      {/* Anonymous Option */}
+                      <div className="mb-6">
+                        <label className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            checked={isAnonymous}
+                            onChange={(e) => setIsAnonymous(e.target.checked)}
+                            className="rounded"
+                          />
+                          <span className="text-sm">Donate anonymously</span>
+                        </label>
+                      </div>
+
                       <Button
-                        key={amount}
-                        variant={
-                          donationAmount === amount.toString()
-                            ? "default"
-                            : "outline"
-                        }
-                        size="sm"
-                        onClick={() => setDonationAmount(amount.toString())}
+                        className="w-full"
+                        size="lg"
+                        disabled={!donationAmount || !user}
+                        onClick={handleDonateClick}
                       >
-                        ${amount}
+                        <Heart className="h-4 w-4 mr-2" />
+                        {`Continue to Payment ${donationAmount ? `($${donationAmount})` : ""}`}
                       </Button>
-                    ))}
-                  </div>
+                    </>
+                  ) : (
+                    <>
+                      {/* Payment Form with Stripe Elements */}
+                      <div className="mb-4">
+                        <div className="flex justify-between items-center mb-4">
+                          <h4 className="font-semibold">Payment Details</h4>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setShowPaymentForm(false)}
+                          >
+                            ← Back
+                          </Button>
+                        </div>
+                        <div className="bg-gray-50 p-3 rounded mb-4">
+                          <div className="flex justify-between">
+                            <span>Donation Amount:</span>
+                            <span className="font-semibold">
+                              ${donationAmount}
+                            </span>
+                          </div>
+                          {donationMessage && (
+                            <div className="mt-2 text-sm text-muted-foreground">
+                              Message: {donationMessage}
+                            </div>
+                          )}
+                          {isAnonymous && (
+                            <div className="mt-1 text-sm text-muted-foreground">
+                              Anonymous donation
+                            </div>
+                          )}
+                        </div>
+                      </div>
 
-                  {/* Custom Amount */}
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium mb-2">
-                      Custom Amount
-                    </label>
-                    <div className="relative">
-                      <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        type="number"
-                        placeholder="Enter amount"
-                        value={donationAmount}
-                        onChange={(e) => setDonationAmount(e.target.value)}
-                        className="pl-10"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Message */}
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium mb-2">
-                      Message (Optional)
-                    </label>
-                    <Textarea
-                      placeholder="Leave a message of support..."
-                      value={donationMessage}
-                      onChange={(e) => setDonationMessage(e.target.value)}
-                      rows={3}
-                    />
-                  </div>
-
-                  {/* Anonymous Option */}
-                  <div className="mb-6">
-                    <label className="flex items-center gap-2">
-                      <input
-                        type="checkbox"
-                        checked={isAnonymous}
-                        onChange={(e) => setIsAnonymous(e.target.checked)}
-                        className="rounded"
-                      />
-                      <span className="text-sm">Donate anonymously</span>
-                    </label>
-                  </div>
-
-                  <Button className="w-full" size="lg">
-                    <Heart className="h-4 w-4 mr-2" />
-                    Donate {donationAmount ? `$${donationAmount}` : "Now"}
-                  </Button>
+                      <Elements
+                        stripe={stripePromise}
+                        options={{
+                          mode: "payment",
+                          amount: Math.round(parseFloat(donationAmount) * 100),
+                          currency: "usd",
+                          appearance: {
+                            theme: "stripe",
+                          },
+                        }}
+                      >
+                        <DonationForm
+                          amount={parseFloat(donationAmount)}
+                          campaignId={campaignId as Id<"campaigns">}
+                          donorId={user?.id as Id<"users">}
+                          message={donationMessage || undefined}
+                          isAnonymous={isAnonymous}
+                          onSuccess={() => {
+                            toast({
+                              title: "Payment Processing",
+                              description: "Your payment is being processed...",
+                              type: "success",
+                            });
+                          }}
+                          onError={(error: string) => {
+                            toast({
+                              title: "Payment Failed",
+                              description: error,
+                              type: "error",
+                            });
+                          }}
+                        />
+                      </Elements>
+                    </>
+                  )}
 
                   <p className="text-xs text-muted-foreground mt-3 text-center">
                     Your donation is secure and tax-deductible
@@ -413,31 +496,36 @@ export default function CampaignDetailPage() {
                     Recent Donations
                   </h3>
                   <div className="space-y-3">
-                    {campaign.recentDonations.map(
-                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                      (donation: any, index: number) => (
+                    {recentDonations && recentDonations.length > 0 ? (
+                      recentDonations.map((donation) => (
                         <div
-                          key={index}
+                          key={donation._id}
                           className="flex items-center justify-between"
                         >
                           <div>
                             <div className="font-medium text-sm">
-                              {donation.name}
+                              {donation.isAnonymous
+                                ? "Anonymous"
+                                : donation.donor?.name || "Unknown"}
                             </div>
                             <div className="text-xs text-muted-foreground">
-                              {donation.time}
+                              {new Date(
+                                donation.createdAt
+                              ).toLocaleDateString()}
                             </div>
                           </div>
                           <div className="font-semibold">
                             {formatCurrency(donation.amount)}
                           </div>
                         </div>
-                      )
+                      ))
+                    ) : (
+                      <div className="text-center text-muted-foreground py-4">
+                        <p className="text-sm">No donations yet</p>
+                        <p className="text-xs">Be the first to donate!</p>
+                      </div>
                     )}
                   </div>
-                  <Button variant="outline" size="sm" className="w-full mt-4">
-                    View All Donations
-                  </Button>
                 </div>
               </div>
             </div>

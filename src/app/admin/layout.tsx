@@ -8,13 +8,14 @@ import {
   Target,
   DollarSign,
   FileText,
-  Settings,
   Search,
   LogOut,
   User,
   Shield,
   ChevronUp,
 } from "lucide-react";
+import { useQuery } from "convex/react";
+import { api } from "../../../convex/_generated/api";
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
@@ -39,6 +40,9 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import Image from "next/image";
+import { useAuth } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -72,15 +76,18 @@ const sidebarItems = [
     icon: FileText,
   },
 
-  {
-    title: "Settings",
-    href: "/admin/settings",
-    icon: Settings,
-  },
+  // {
+  //   title: "Settings",
+  //   href: "/admin/settings",
+  //   icon: Settings,
+  // },
 ];
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
   const pathname = usePathname();
+  const currentUser = useQuery(api.users.getCurrentUser, {});
+  const { signOut } = useAuth();
+  const router = useRouter();
 
   const isActive = (href: string) => {
     if (href === "/admin") {
@@ -89,14 +96,26 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     return pathname.startsWith(href);
   };
 
+  if (currentUser === undefined) {
+    return <div>Loading...</div>;
+  }
+
+  if (currentUser?.role !== "admin") {
+    router.push("/");
+  }
+
   return (
     <SidebarProvider>
       <Sidebar>
         {/* Sidebar Header */}
         <SidebarHeader>
           <div className="flex items-center gap-2 px-4 py-2">
-            <Shield className="h-8 w-8 text-primary" />
-            <span className="text-xl font-bold">DonateNow Admin</span>
+            <Image
+              src="/logo.png"
+              alt="goldendoor foundation logo"
+              width={150}
+              height={150}
+            />
           </div>
         </SidebarHeader>
 
@@ -142,9 +161,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                       <User className="size-4" />
                     </div>
                     <div className="grid flex-1 text-left text-sm leading-tight">
-                      <span className="truncate font-semibold">Admin User</span>
+                      <span className="truncate font-semibold">
+                        {currentUser?.name || "Loading..."}
+                      </span>
                       <span className="truncate text-xs">
-                        admin@donatenow.com
+                        {currentUser?.email || "Loading..."}
                       </span>
                     </div>
                     <ChevronUp className="ml-auto size-4" />
@@ -163,25 +184,20 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                       </div>
                       <div className="grid flex-1 text-left text-sm leading-tight">
                         <span className="truncate font-semibold">
-                          Admin User
+                          {currentUser?.name || "Loading..."}
                         </span>
                         <span className="truncate text-xs">
-                          admin@donatenow.com
+                          {currentUser?.email || "Loading..."}
                         </span>
                       </div>
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
-                    <User className="mr-2 h-4 w-4" />
-                    Profile
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Settings className="mr-2 h-4 w-4" />
-                    Settings
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      signOut();
+                    }}
+                  >
                     <LogOut className="mr-2 h-4 w-4" />
                     Log out
                   </DropdownMenuItem>

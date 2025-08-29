@@ -33,12 +33,16 @@ export function AuthButtons({
 
   // Show user button if authenticated
   if (isSignedIn) {
-    return <UserButton />;
+    return (
+      <div className="mr-10">
+        <UserButton />
+      </div>
+    );
   }
 
   // Show sign in/get started buttons if not authenticated
   return (
-    <div className={`flex gap-2 ${isMobile ? "flex-col" : ""}`}>
+    <div className={`flex gap-2 ${isMobile ? "flex-col" : "mr-10"}`}>
       <Button asChild variant="outline" size={isMobile ? "default" : "default"}>
         <a href={loginUrl}>{loginText}</a>
       </Button>

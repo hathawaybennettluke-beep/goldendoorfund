@@ -1,6 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useQuery, useMutation } from "convex/react";
+import { useRouter } from "next/navigation";
+import { api } from "../../../../convex/_generated/api";
 import {
   Search,
   Filter,
@@ -43,105 +46,36 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 
-// Mock campaign data
-const campaigns = [
-  {
-    id: "1",
-    title: "Emergency Water Wells for Rural Communities",
-    organization: "Water for Life Foundation",
-    raised: 45000,
-    goal: 75000,
-    donors: 234,
-    status: "active",
-    urgency: "high",
-    category: "Water & Sanitation",
-    location: "East Africa",
-    startDate: "2024-09-15",
-    endDate: "2024-12-15",
-    featured: true,
-  },
-  {
-    id: "2",
-    title: "School Supplies for Underprivileged Children",
-    organization: "Education First Initiative",
-    raised: 28000,
-    goal: 40000,
-    donors: 156,
-    status: "active",
-    urgency: "medium",
-    category: "Education",
-    location: "Rural Bangladesh",
-    startDate: "2024-10-01",
-    endDate: "2024-11-30",
-    featured: false,
-  },
-  {
-    id: "3",
-    title: "Mobile Medical Clinic for Remote Areas",
-    organization: "Doctors Without Borders",
-    raised: 100000,
-    goal: 100000,
-    donors: 389,
-    status: "completed",
-    urgency: "high",
-    category: "Healthcare",
-    location: "Amazon Basin, Brazil",
-    startDate: "2024-07-01",
-    endDate: "2024-10-15",
-    featured: true,
-  },
-  {
-    id: "4",
-    title: "Reforestation Project - Plant 10,000 Trees",
-    organization: "Green Earth Coalition",
-    raised: 0,
-    goal: 25000,
-    donors: 0,
-    status: "upcoming",
-    urgency: "medium",
-    category: "Environment",
-    location: "Costa Rica",
-    startDate: "2025-01-01",
-    endDate: "2025-03-01",
-    featured: false,
-  },
-  {
-    id: "5",
-    title: "Emergency Food Relief for Disaster Victims",
-    organization: "Global Relief Network",
-    raised: 85000,
-    goal: 120000,
-    donors: 567,
-    status: "active",
-    urgency: "high",
-    category: "Emergency Relief",
-    location: "Philippines",
-    startDate: "2024-10-10",
-    endDate: "2024-12-31",
-    featured: true,
-  },
-  {
-    id: "6",
-    title: "Women's Empowerment Microfinance Program",
-    organization: "Women Rising Foundation",
-    raised: 62000,
-    goal: 80000,
-    donors: 298,
-    status: "active",
-    urgency: "low",
-    category: "Economic Development",
-    location: "Rural India",
-    startDate: "2024-09-01",
-    endDate: "2025-01-15",
-    featured: false,
-  },
-];
+// Campaign data will be fetched from Convex
 
 export default function CampaignsManagement() {
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [urgencyFilter, setUrgencyFilter] = useState("all");
+
+  // Fetch campaigns from Convex
+  const campaigns = useQuery(api.campaigns.list, {
+    status:
+      statusFilter === "all"
+        ? undefined
+        : (statusFilter as "active" | "completed" | "upcoming" | "draft"),
+    category: categoryFilter === "all" ? undefined : categoryFilter,
+    urgency:
+      urgencyFilter === "all"
+        ? undefined
+        : (urgencyFilter as "high" | "medium" | "low"),
+    search: searchTerm || undefined,
+  });
+
+  // Fetch campaign statistics
+  const stats = useQuery(api.campaigns.getStats);
+
+  // Mutations for CRUD operations
+  const deleteCampaign = useMutation(api.campaigns.remove);
+  const toggleFeatured = useMutation(api.campaigns.toggleFeatured);
+  const updateStatus = useMutation(api.campaigns.updateStatus);
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-US", {
@@ -182,21 +116,13 @@ export default function CampaignsManagement() {
     }
   };
 
-  const filteredCampaigns = campaigns.filter((campaign) => {
-    const matchesSearch =
-      campaign.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      campaign.organization.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus =
-      statusFilter === "all" || campaign.status === statusFilter;
-    const matchesCategory =
-      categoryFilter === "all" || campaign.category === categoryFilter;
-    const matchesUrgency =
-      urgencyFilter === "all" || campaign.urgency === urgencyFilter;
+  // Filter campaigns (filtering is now handled by Convex query)
+  const filteredCampaigns = campaigns || [];
 
-    return matchesSearch && matchesStatus && matchesCategory && matchesUrgency;
-  });
-
-  const categories = Array.from(new Set(campaigns.map((c) => c.category)));
+  // Get unique categories from campaigns
+  const categories = Array.from(
+    new Set(filteredCampaigns.map((c) => c.category))
+  );
 
   return (
     <div className="space-y-6">
@@ -216,7 +142,7 @@ export default function CampaignsManagement() {
             <Download className="mr-2 h-4 w-4" />
             Export
           </Button>
-          <Button>
+          <Button onClick={() => router.push("/admin/campaigns/new")}>
             <Plus className="mr-2 h-4 w-4" />
             Create Campaign
           </Button>
@@ -286,7 +212,7 @@ export default function CampaignsManagement() {
             </span>
           </div>
           <div className="text-2xl font-bold mt-2 text-foreground">
-            {campaigns.length}
+            {stats?.totalCampaigns || 0}
           </div>
         </div>
         <div className="bg-card p-4 rounded-lg border">
@@ -295,7 +221,7 @@ export default function CampaignsManagement() {
             <span className="text-sm text-muted-foreground">Total Raised</span>
           </div>
           <div className="text-2xl font-bold mt-2 text-foreground">
-            {formatCurrency(campaigns.reduce((sum, c) => sum + c.raised, 0))}
+            {formatCurrency(stats?.totalRaised || 0)}
           </div>
         </div>
         <div className="bg-card p-4 rounded-lg border">
@@ -304,7 +230,7 @@ export default function CampaignsManagement() {
             <span className="text-sm text-muted-foreground">Total Donors</span>
           </div>
           <div className="text-2xl font-bold mt-2 text-foreground">
-            {campaigns.reduce((sum, c) => sum + c.donors, 0).toLocaleString()}
+            {stats?.totalDonors || 0}
           </div>
         </div>
         <div className="bg-card p-4 rounded-lg border">
@@ -315,7 +241,7 @@ export default function CampaignsManagement() {
             </span>
           </div>
           <div className="text-2xl font-bold mt-2 text-foreground">
-            {campaigns.filter((c) => c.status === "active").length}
+            {stats?.activeCampaigns || 0}
           </div>
         </div>
       </div>
@@ -337,7 +263,7 @@ export default function CampaignsManagement() {
           </TableHeader>
           <TableBody>
             {filteredCampaigns.map((campaign) => (
-              <TableRow key={campaign.id}>
+              <TableRow key={campaign._id}>
                 <TableCell>
                   <div>
                     <div className="font-medium">{campaign.title}</div>
@@ -360,23 +286,26 @@ export default function CampaignsManagement() {
                 <TableCell>
                   <div className="w-24">
                     <div className="flex justify-between text-xs mb-1">
-                      <span>{formatCurrency(campaign.raised)}</span>
+                      <span>{formatCurrency(campaign.currentAmount)}</span>
                       <span>
                         {Math.round(
-                          getProgressPercentage(campaign.raised, campaign.goal)
+                          getProgressPercentage(
+                            campaign.currentAmount,
+                            campaign.goalAmount
+                          )
                         )}
                         %
                       </span>
                     </div>
                     <Progress
                       value={getProgressPercentage(
-                        campaign.raised,
-                        campaign.goal
+                        campaign.currentAmount,
+                        campaign.goalAmount
                       )}
                       className="h-2"
                     />
                     <div className="text-xs text-muted-foreground mt-1">
-                      of {formatCurrency(campaign.goal)}
+                      of {formatCurrency(campaign.goalAmount)}
                     </div>
                   </div>
                 </TableCell>
@@ -396,7 +325,7 @@ export default function CampaignsManagement() {
                 <TableCell>
                   <div className="flex items-center gap-1">
                     <Users className="h-3 w-3 text-muted-foreground" />
-                    <span className="text-sm">{campaign.donors}</span>
+                    <span className="text-sm">0</span>
                   </div>
                 </TableCell>
                 <TableCell>
@@ -415,15 +344,26 @@ export default function CampaignsManagement() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() =>
+                          router.push(`/admin/campaigns/${campaign._id}`)
+                        }
+                      >
                         <Eye className="mr-2 h-4 w-4" />
                         View Details
                       </DropdownMenuItem>
-                      <DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() =>
+                          router.push(`/admin/campaigns/${campaign._id}/edit`)
+                        }
+                      >
                         <Edit className="mr-2 h-4 w-4" />
                         Edit Campaign
                       </DropdownMenuItem>
-                      <DropdownMenuItem className="text-red-600">
+                      <DropdownMenuItem
+                        className="text-red-600"
+                        onClick={() => deleteCampaign({ id: campaign._id })}
+                      >
                         <Trash2 className="mr-2 h-4 w-4" />
                         Delete Campaign
                       </DropdownMenuItem>
@@ -439,7 +379,8 @@ export default function CampaignsManagement() {
       {/* Results Summary */}
       <div className="flex items-center justify-between text-sm text-muted-foreground">
         <span>
-          Showing {filteredCampaigns.length} of {campaigns.length} campaigns
+          Showing {filteredCampaigns.length} of {stats?.totalCampaigns || 0}{" "}
+          campaigns
         </span>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" disabled>

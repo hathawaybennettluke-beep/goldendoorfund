@@ -35,6 +35,7 @@ export function useUserSync() {
             user.firstName ||
             user.emailAddresses[0]?.emailAddress.split("@")[0] ||
             "User",
+          role: "user",
           email: user.emailAddresses[0]?.emailAddress || "",
           profileImage: user.imageUrl,
         });

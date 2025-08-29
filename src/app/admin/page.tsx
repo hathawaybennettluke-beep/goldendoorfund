@@ -8,7 +8,6 @@ import {
   ArrowUpRight,
   ArrowDownRight,
   Calendar,
-  Clock,
   Eye,
   Edit,
 } from "lucide-react";
@@ -21,159 +20,23 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
-
-// Mock data for the dashboard
-const dashboardStats = [
-  {
-    title: "Total Donations",
-    value: "$2,847,392",
-    change: "+12.5%",
-    changeType: "positive" as const,
-    icon: DollarSign,
-    description: "From last month",
-  },
-  {
-    title: "Active Campaigns",
-    value: "127",
-    change: "+8",
-    changeType: "positive" as const,
-    icon: Target,
-    description: "New this month",
-  },
-  {
-    title: "Total Users",
-    value: "15,847",
-    change: "+23.1%",
-    changeType: "positive" as const,
-    icon: Users,
-    description: "From last month",
-  },
-  {
-    title: "Success Rate",
-    value: "94.2%",
-    change: "-2.1%",
-    changeType: "negative" as const,
-    icon: TrendingUp,
-    description: "Campaign completion",
-  },
-];
-
-const recentCampaigns = [
-  {
-    id: "1",
-    title: "Emergency Water Wells for Rural Communities",
-    raised: 45000,
-    goal: 75000,
-    status: "active",
-    urgency: "high",
-    donors: 234,
-    daysLeft: 12,
-    category: "Water & Sanitation",
-  },
-  {
-    id: "2",
-    title: "School Supplies for Underprivileged Children",
-    raised: 28000,
-    goal: 40000,
-    status: "active",
-    urgency: "medium",
-    donors: 156,
-    daysLeft: 25,
-    category: "Education",
-  },
-  {
-    id: "3",
-    title: "Emergency Food Relief for Disaster Victims",
-    raised: 85000,
-    goal: 120000,
-    status: "active",
-    urgency: "high",
-    donors: 567,
-    daysLeft: 8,
-    category: "Emergency Relief",
-  },
-  {
-    id: "4",
-    title: "Mobile Medical Clinic for Remote Areas",
-    raised: 100000,
-    goal: 100000,
-    status: "completed",
-    urgency: "high",
-    donors: 389,
-    daysLeft: 0,
-    category: "Healthcare",
-  },
-];
-
-const recentDonations = [
-  {
-    id: "1",
-    donor: "Sarah M.",
-    amount: 500,
-    campaign: "Emergency Water Wells",
-    time: "2 hours ago",
-    anonymous: false,
-  },
-  {
-    id: "2",
-    donor: "Anonymous",
-    amount: 100,
-    campaign: "School Supplies",
-    time: "5 hours ago",
-    anonymous: true,
-  },
-  {
-    id: "3",
-    donor: "Michael K.",
-    amount: 250,
-    campaign: "Food Relief",
-    time: "1 day ago",
-    anonymous: false,
-  },
-  {
-    id: "4",
-    donor: "Anonymous",
-    amount: 75,
-    campaign: "Medical Clinic",
-    time: "2 days ago",
-    anonymous: true,
-  },
-  {
-    id: "5",
-    donor: "Emma L.",
-    amount: 150,
-    campaign: "Water Wells",
-    time: "3 days ago",
-    anonymous: false,
-  },
-];
-
-const recentActivity = [
-  {
-    id: "1",
-    type: "campaign",
-    title: "New Campaign Created",
-    message: "Emergency Water Wells campaign went live",
-    time: "2 hours ago",
-  },
-  {
-    id: "2",
-    type: "donation",
-    title: "Large Donation Received",
-    message: "$500 donation for School Supplies campaign",
-    time: "5 hours ago",
-  },
-  {
-    id: "3",
-    type: "blog",
-    title: "Blog Post Published",
-    message: "New impact story about water projects",
-    time: "1 day ago",
-  },
-];
+import { useQuery } from "convex/react";
+import { api } from "../../../convex/_generated/api";
+import { useRouter } from "next/navigation";
 
 export default function AdminDashboard() {
+  // Fetch real data
+  const userStats = useQuery(api.users.getUserStats, {});
+  const donationStats = useQuery(api.donations.getStats, {});
+  const campaignStats = useQuery(api.campaigns.getStats, {});
+  const recentCampaigns = useQuery(api.campaigns.list, { limit: 4 });
+  const recentDonations = useQuery(api.donations.getRecentActivity, {
+    limit: 5,
+  });
+
+  const isLoading = !userStats || !donationStats || !campaignStats;
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
@@ -185,6 +48,22 @@ export default function AdminDashboard() {
 
   const getProgressPercentage = (raised: number, goal: number) => {
     return Math.min((raised / goal) * 100, 100);
+  };
+
+  const getTimeAgo = (timestamp: number) => {
+    const now = Date.now();
+    const diffMs = now - timestamp;
+    const diffMins = Math.floor(diffMs / (1000 * 60));
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+    if (diffMins < 60) {
+      return diffMins <= 1 ? "Just now" : `${diffMins} minutes ago`;
+    } else if (diffHours < 24) {
+      return diffHours === 1 ? "1 hour ago" : `${diffHours} hours ago`;
+    } else {
+      return diffDays === 1 ? "1 day ago" : `${diffDays} days ago`;
+    }
   };
 
   const getStatusColor = (status: string) => {
@@ -213,6 +92,8 @@ export default function AdminDashboard() {
     }
   };
 
+  const router = useRouter();
+
   return (
     <div className="space-y-6">
       {/* Page Header */}
@@ -229,7 +110,11 @@ export default function AdminDashboard() {
             <Calendar className="mr-2 h-4 w-4" />
             Last 30 days
           </Button>
-          <Button>
+          <Button
+            onClick={() => {
+              router.push("/admin/campaigns/new");
+            }}
+          >
             <Target className="mr-2 h-4 w-4" />
             Create Campaign
           </Button>
@@ -238,43 +123,117 @@ export default function AdminDashboard() {
 
       {/* Stats Grid */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {dashboardStats.map((stat) => {
-          const Icon = stat.icon;
-          return (
-            <Card key={stat.title}>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground">
-                  {stat.title}
-                </CardTitle>
-                <Icon className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-foreground">
-                  {stat.value}
-                </div>
-                <div className="flex items-center text-xs">
-                  {stat.changeType === "positive" ? (
-                    <ArrowUpRight className="mr-1 h-3 w-3 text-emerald-500" />
-                  ) : (
-                    <ArrowDownRight className="mr-1 h-3 w-3 text-destructive" />
-                  )}
-                  <span
-                    className={
-                      stat.changeType === "positive"
-                        ? "text-emerald-500"
-                        : "text-destructive"
-                    }
-                  >
-                    {stat.change}
-                  </span>
-                  <span className="text-muted-foreground ml-1">
-                    {stat.description}
-                  </span>
-                </div>
-              </CardContent>
-            </Card>
-          );
-        })}
+        {/* Total Donations */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              Total Donations
+            </CardTitle>
+            <DollarSign className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <Skeleton className="h-8 w-24" />
+            ) : (
+              <div className="text-2xl font-bold text-foreground">
+                {formatCurrency(donationStats?.totalAmount || 0)}
+              </div>
+            )}
+            <div className="flex items-center text-xs mt-1">
+              <span className="text-muted-foreground">
+                {isLoading ? (
+                  <Skeleton className="h-3 w-16" />
+                ) : (
+                  `${donationStats?.totalDonations || 0} total donations`
+                )}
+              </span>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Active Campaigns */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              Active Campaigns
+            </CardTitle>
+            <Target className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <Skeleton className="h-8 w-16" />
+            ) : (
+              <div className="text-2xl font-bold text-foreground">
+                {campaignStats?.activeCampaigns || 0}
+              </div>
+            )}
+            <div className="flex items-center text-xs mt-1">
+              <span className="text-muted-foreground">
+                {isLoading ? (
+                  <Skeleton className="h-3 w-20" />
+                ) : (
+                  `${campaignStats?.totalCampaigns || 0} total campaigns`
+                )}
+              </span>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Total Users */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              Total Users
+            </CardTitle>
+            <Users className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <Skeleton className="h-8 w-20" />
+            ) : (
+              <div className="text-2xl font-bold text-foreground">
+                {userStats?.totalUsers || 0}
+              </div>
+            )}
+            <div className="flex items-center text-xs mt-1">
+              <span className="text-muted-foreground">
+                {isLoading ? (
+                  <Skeleton className="h-3 w-16" />
+                ) : (
+                  `${userStats?.activeUsers || 0} active users`
+                )}
+              </span>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Total Raised */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              Total Raised
+            </CardTitle>
+            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <Skeleton className="h-8 w-24" />
+            ) : (
+              <div className="text-2xl font-bold text-foreground">
+                {formatCurrency(campaignStats?.totalRaised || 0)}
+              </div>
+            )}
+            <div className="flex items-center text-xs mt-1">
+              <span className="text-muted-foreground">
+                {isLoading ? (
+                  <Skeleton className="h-3 w-20" />
+                ) : (
+                  `${campaignStats?.completedCampaigns || 0} completed campaigns`
+                )}
+              </span>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
@@ -297,62 +256,99 @@ export default function AdminDashboard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {recentCampaigns.map((campaign) => (
-                  <div
-                    key={campaign.id}
-                    className="flex items-center justify-between p-4 border rounded-lg"
-                  >
-                    <div className="flex-1">
+                {!recentCampaigns ? (
+                  // Loading skeletons
+                  Array.from({ length: 3 }).map((_, i) => (
+                    <div key={i} className="p-4 border rounded-lg">
                       <div className="flex items-center gap-2 mb-2">
-                        <h3 className="font-medium text-sm">
-                          {campaign.title}
-                        </h3>
-                        <span
-                          className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(campaign.status)}`}
-                        >
-                          {campaign.status}
-                        </span>
-                        <span
-                          className={`px-2 py-1 rounded-full text-xs font-medium ${getUrgencyColor(campaign.urgency)}`}
-                        >
-                          {campaign.urgency}
-                        </span>
+                        <Skeleton className="h-4 w-48" />
+                        <Skeleton className="h-5 w-16" />
                       </div>
                       <div className="mb-2">
-                        <div className="flex justify-between text-sm mb-1">
-                          <span>{formatCurrency(campaign.raised)} raised</span>
-                          <span>{formatCurrency(campaign.goal)} goal</span>
+                        <div className="flex justify-between mb-1">
+                          <Skeleton className="h-3 w-20" />
+                          <Skeleton className="h-3 w-20" />
                         </div>
-                        <Progress
-                          value={getProgressPercentage(
-                            campaign.raised,
-                            campaign.goal
-                          )}
-                          className="h-2"
-                        />
+                        <Skeleton className="h-2 w-full" />
                       </div>
-                      <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                        <span className="flex items-center gap-1">
-                          <Users className="h-3 w-3" />
-                          {campaign.donors} donors
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <Clock className="h-3 w-3" />
-                          {campaign.daysLeft} days left
-                        </span>
-                        <span>{campaign.category}</span>
+                      <div className="flex items-center gap-4">
+                        <Skeleton className="h-3 w-16" />
+                        <Skeleton className="h-3 w-20" />
+                        <Skeleton className="h-3 w-12" />
                       </div>
                     </div>
-                    <div className="flex gap-2 ml-4">
-                      <Button variant="ghost" size="sm">
-                        <Eye className="h-3 w-3" />
-                      </Button>
-                      <Button variant="ghost" size="sm">
-                        <Edit className="h-3 w-3" />
-                      </Button>
-                    </div>
+                  ))
+                ) : recentCampaigns.length === 0 ? (
+                  <div className="text-center py-8 text-muted-foreground">
+                    <Target className="mx-auto h-12 w-12 mb-4 opacity-50" />
+                    <p>No campaigns yet</p>
+                    <p className="text-sm">
+                      Create your first campaign to get started
+                    </p>
                   </div>
-                ))}
+                ) : (
+                  recentCampaigns.map((campaign) => (
+                    <div
+                      key={campaign._id}
+                      className="flex items-center justify-between p-4 border rounded-lg"
+                    >
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <h3 className="font-medium text-sm">
+                            {campaign.title}
+                          </h3>
+                          <span
+                            className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(campaign.status)}`}
+                          >
+                            {campaign.status}
+                          </span>
+                          {campaign.urgency && (
+                            <span
+                              className={`px-2 py-1 rounded-full text-xs font-medium ${getUrgencyColor(campaign.urgency)}`}
+                            >
+                              {campaign.urgency}
+                            </span>
+                          )}
+                        </div>
+                        <div className="mb-2">
+                          <div className="flex justify-between text-sm mb-1">
+                            <span>
+                              {formatCurrency(campaign.currentAmount)} raised
+                            </span>
+                            <span>
+                              {formatCurrency(campaign.goalAmount)} goal
+                            </span>
+                          </div>
+                          <Progress
+                            value={getProgressPercentage(
+                              campaign.currentAmount,
+                              campaign.goalAmount
+                            )}
+                            className="h-2"
+                          />
+                        </div>
+                        <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                          <span>{campaign.category}</span>
+                          <span>
+                            {new Date(campaign.createdAt).toLocaleDateString()}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex gap-2 ml-4">
+                        <Button variant="ghost" size="sm" asChild>
+                          <Link href={`/admin/campaigns/${campaign._id}`}>
+                            <Eye className="h-3 w-3" />
+                          </Link>
+                        </Button>
+                        <Button variant="ghost" size="sm" asChild>
+                          <Link href={`/admin/campaigns/${campaign._id}/edit`}>
+                            <Edit className="h-3 w-3" />
+                          </Link>
+                        </Button>
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             </CardContent>
           </Card>
@@ -375,67 +371,50 @@ export default function AdminDashboard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {recentDonations.map((donation) => (
-                  <div
-                    key={donation.id}
-                    className="flex items-center justify-between"
-                  >
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between">
-                        <span className="font-medium text-sm">
-                          {donation.donor}
-                        </span>
-                        <span className="font-bold text-emerald-500">
-                          {formatCurrency(donation.amount)}
-                        </span>
-                      </div>
-                      <div className="text-xs text-muted-foreground">
-                        {donation.campaign} • {donation.time}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Recent Activity */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Clock className="h-4 w-4" />
-                Recent Activity
-              </CardTitle>
-              <CardDescription>Latest platform activity</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {recentActivity.map((activity) => (
-                  <div key={activity.id} className="p-3 border rounded-lg">
-                    <div className="flex items-start justify-between">
+                {!recentDonations ? (
+                  // Loading skeletons
+                  Array.from({ length: 5 }).map((_, i) => (
+                    <div key={i} className="flex items-center justify-between">
                       <div className="flex-1">
-                        <h4 className="font-medium text-sm">
-                          {activity.title}
-                        </h4>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          {activity.message}
-                        </p>
-                        <span className="text-xs text-muted-foreground/60">
-                          {activity.time}
-                        </span>
+                        <div className="flex items-center justify-between mb-1">
+                          <Skeleton className="h-4 w-24" />
+                          <Skeleton className="h-4 w-16" />
+                        </div>
+                        <Skeleton className="h-3 w-32" />
                       </div>
-                      <div
-                        className={`w-2 h-2 rounded-full ${
-                          activity.type === "campaign"
-                            ? "bg-blue-500"
-                            : activity.type === "donation"
-                              ? "bg-emerald-500"
-                              : "bg-purple-500"
-                        }`}
-                      />
                     </div>
+                  ))
+                ) : recentDonations.length === 0 ? (
+                  <div className="text-center py-8 text-muted-foreground">
+                    <DollarSign className="mx-auto h-12 w-12 mb-4 opacity-50" />
+                    <p>No donations yet</p>
+                    <p className="text-sm">
+                      Donations will appear here once received
+                    </p>
                   </div>
-                ))}
+                ) : (
+                  recentDonations.map((donation) => (
+                    <div
+                      key={donation._id}
+                      className="flex items-center justify-between"
+                    >
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between">
+                          <span className="font-medium text-sm">
+                            {donation.donor?.name || "Anonymous"}
+                          </span>
+                          <span className="font-bold text-emerald-500">
+                            {formatCurrency(donation.amount)}
+                          </span>
+                        </div>
+                        <div className="text-xs text-muted-foreground">
+                          {donation.campaign?.title || "Unknown Campaign"} •{" "}
+                          {getTimeAgo(donation.createdAt)}
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             </CardContent>
           </Card>
