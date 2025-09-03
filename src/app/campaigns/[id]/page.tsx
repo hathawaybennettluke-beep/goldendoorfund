@@ -406,8 +406,8 @@ export default function CampaignDetailPage() {
                         </label>
                       </div>
 
-                      <Tooltip >
-                      <TooltipTrigger>
+                      <Tooltip>
+                      <TooltipTrigger className="w-full">
                           <Button
                         className="w-full"
                         size="lg"
