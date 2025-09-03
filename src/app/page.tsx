@@ -326,7 +326,7 @@ export default function HomePage() {
       </section>
 
       {/* Campaign Showcase */}
-      <CampaignShowcase />
+      {/* <CampaignShowcase /> */}
 
       {/* Features Section */}
       <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-10 relative overflow-hidden bg-gradient-to-br from-muted/30 via-background to-muted/20">

@@ -170,4 +170,24 @@ export default defineSchema({
     .index("by_key", ["key"])
     .index("by_category", ["category"])
     .index("by_public", ["isPublic"]),
+
+  contactSubmissions: defineTable({
+    name: v.string(),
+    email: v.string(),
+    message: v.string(),
+    status: v.union(
+      v.literal("pending"),
+      v.literal("processed"),
+      v.literal("replied")
+    ),
+    emailSent: v.boolean(), // Whether notification email was sent successfully
+    ipAddress: v.optional(v.string()), // For security/spam prevention
+    userAgent: v.optional(v.string()), // Browser info for debugging
+    createdAt: v.number(),
+    processedAt: v.optional(v.number()),
+  })
+    .index("by_email", ["email"])
+    .index("by_status", ["status"])
+    .index("by_created_date", ["createdAt"])
+    .index("by_email_sent", ["emailSent"]),
 });

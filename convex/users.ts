@@ -247,6 +247,24 @@ export const getCurrentUser = query({
   },
 });
 
+// CHECK IF USER IS ADMIN (For middleware)
+export const isUserAdmin = query({
+  args: { clerkUserId: v.string() },
+  handler: async (ctx, args) => {
+    // Find user by Clerk ID
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_clerk_id", (q) => q.eq("clerkUserId", args.clerkUserId))
+      .first();
+
+    if (!user) {
+      return false;
+    }
+
+    return user.role === "admin";
+  },
+});
+
 // UPDATE USER (Admin)
 export const updateUser = mutation({
   args: {

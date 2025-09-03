@@ -13,7 +13,9 @@ import {
   Send,
   Sparkles,
   Star,
-  CheckCircle
+  CheckCircle,
+  Loader2,
+  AlertCircle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,6 +29,9 @@ import {
 } from "@/components/ui/select";
 import Link from "next/link";
 import { Footer } from "@/components/Footer";
+import { useAction, useMutation } from "convex/react";
+import { api } from "../../../convex/_generated/api";
+import { toast } from "sonner";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -36,12 +41,66 @@ export default function ContactPage() {
     category: "",
     message: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const submitContactForm = useAction(api.contactFormAction.submitContactForm);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log("Form submitted:", formData);
-    // You would typically send this to your backend
+    setIsSubmitting(true);
+    setSubmitStatus('idle');
+    setErrorMessage('');
+
+    try {
+      // Basic client-side validation
+      if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
+        throw new Error('Please fill in all required fields');
+      }
+
+      if (formData.name.length < 2) {
+        throw new Error('Name must be at least 2 characters long');
+      }
+
+      if (formData.message.length < 10) {
+        throw new Error('Message must be at least 10 characters long');
+      }
+
+      // Get user's IP and user agent for security
+      const ipResponse = await fetch('https://api.ipify.org?format=json').catch(() => null);
+      const ipData = ipResponse ? await ipResponse.json() : null;
+      
+      const result = await submitContactForm({
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        message: `Subject: ${formData.subject || 'No subject'}\nCategory: ${formData.category || 'General'}\n\nMessage:\n${formData.message.trim()}`,
+        ipAddress: ipData?.ip,
+        userAgent: navigator.userAgent,
+      });
+
+      if (result.success) {
+        setSubmitStatus('success');
+        setFormData({
+          name: "",
+          email: "",
+          subject: "",
+          category: "",
+          message: "",
+        });
+        toast.success(result.message || 'Message sent successfully!');
+      } else {
+        throw new Error('Failed to send message');
+      }
+    } catch (error) {
+      console.error('Contact form error:', error);
+      const message = error instanceof Error ? error.message : 'Failed to send message. Please try again.';
+      setErrorMessage(message);
+      setSubmitStatus('error');
+      toast.error(message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleInputChange = (field: string, value: string) => {
@@ -327,9 +386,41 @@ export default function ContactPage() {
                   />
                 </div>
 
-                <Button type="submit" size="lg" className="w-full h-12 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary">
-                  <Send className="mr-2 h-5 w-5" />
-                  Send Message
+                {/* Success Message */}
+                {submitStatus === 'success' && (
+                  <div className="p-4 rounded-lg bg-green-50 border border-green-200 flex items-center gap-3 mb-4">
+                    <CheckCircle className="h-5 w-5 text-green-600" />
+                    <p className="text-green-800 font-medium">
+                      Thank you! Your message has been sent successfully. We'll get back to you soon.
+                    </p>
+                  </div>
+                )}
+
+                {/* Error Message */}
+                {submitStatus === 'error' && errorMessage && (
+                  <div className="p-4 rounded-lg bg-red-50 border border-red-200 flex items-center gap-3 mb-4">
+                    <AlertCircle className="h-5 w-5 text-red-600" />
+                    <p className="text-red-800 font-medium">{errorMessage}</p>
+                  </div>
+                )}
+
+                <Button 
+                  type="submit" 
+                  size="lg" 
+                  disabled={isSubmitting}
+                  className="w-full h-12 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="mr-2 h-5 w-5" />
+                      Send Message
+                    </>
+                  )}
                 </Button>
               </form>
             </div>

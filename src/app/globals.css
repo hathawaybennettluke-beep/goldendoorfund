@@ -127,7 +127,7 @@
   --muted-foreground: oklch(0.45 0.02 250);
   
   /* Accent - Vibrant Blue */
-  --accent: oklch(0.65 0.15 240);
+  --accent: oklch(0.75 0.15 85);
   --accent-foreground: oklch(1 0 0);
   
   /* Destructive - Modern Red */

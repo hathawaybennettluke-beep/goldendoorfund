@@ -1,7 +1,7 @@
 "use client";
 
 import { useUser, useClerk } from "@clerk/nextjs";
-import { LogOut, User, Settings, Heart, Receipt } from "lucide-react";
+import { LogOut, User, Settings, Heart, Receipt, Cog } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -52,26 +52,26 @@ export function UserButton() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <a href="/profile" className="cursor-pointer">
+          <a href="/profile" className="cursor-pointer hover:text-primary hover:bg-primary/10 rounded-lg transition-all duration-300">
             <User className="mr-2 h-4 w-4" />
             <span>Profile</span>
           </a>
         </DropdownMenuItem>
+       
         <DropdownMenuItem asChild>
-          <a href="/donation-history" className="cursor-pointer">
+          <a href="/donation-history" className="cursor-pointer hover:text-primary hover:bg-primary/10 rounded-lg transition-all duration-300">
             <Heart className="mr-2 h-4 w-4" />
             <span>Donation History</span>
           </a>
         </DropdownMenuItem>
-
-        {/* <DropdownMenuItem asChild>
-          <a href="/settings" className="cursor-pointer">
-            <Settings className="mr-2 h-4 w-4" />
-            <span>Settings</span>
+         <DropdownMenuItem asChild className={`${user.role === 'admin' ? '' : 'hidden'}`}>
+          <a href="/admin" className="cursor-pointer hover:text-primary hover:bg-primary/10 rounded-lg transition-all duration-300">
+            <Cog className="mr-2 h-4 w-4" />
+            <span>Admin Dashboard</span>
           </a>
-        </DropdownMenuItem> */}
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer" onClick={() => signOut()}>
+        <DropdownMenuItem className="cursor-pointer hover:text-primary hover:bg-primary/10 rounded-lg transition-all duration-300" onClick={() => signOut()}>
           <LogOut className="mr-2 h-4 w-4" />
           <span>Sign out</span>
         </DropdownMenuItem>

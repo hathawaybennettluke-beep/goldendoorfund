@@ -16,6 +16,8 @@ import type {
 import type * as blog from "../blog.js";
 import type * as campaigns from "../campaigns.js";
 import type * as cms from "../cms.js";
+import type * as contactForm from "../contactForm.js";
+import type * as contactFormAction from "../contactFormAction.js";
 import type * as donations from "../donations.js";
 import type * as http from "../http.js";
 import type * as payments from "../payments.js";
@@ -33,6 +35,8 @@ declare const fullApi: ApiFromModules<{
   blog: typeof blog;
   campaigns: typeof campaigns;
   cms: typeof cms;
+  contactForm: typeof contactForm;
+  contactFormAction: typeof contactFormAction;
   donations: typeof donations;
   http: typeof http;
   payments: typeof payments;

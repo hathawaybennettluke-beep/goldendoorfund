@@ -244,22 +244,25 @@ export default function CampaignsManagement() {
                 </SelectContent>
               </Select>
 
-              <Select
-                value={selectedCategory}
-                onValueChange={handleCategoryChange}
-              >
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Category" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Categories</SelectItem>
-                  {categories.map((category) => (
-                    <SelectItem key={category} value={category}>
-                      {category}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              {categories.length > 0 && (
+                <Select
+                  value={selectedCategory}
+                  onValueChange={handleCategoryChange}
+                >
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Categories</SelectItem>
+                    {categories?.map((category) => (
+                      <SelectItem key={category} value={category}>
+                        {category}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )
+              }
 
               <Select
                 value={selectedUrgency}
@@ -327,7 +330,7 @@ export default function CampaignsManagement() {
               </div>
             ) : (
               <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-                {filteredCampaigns.map((campaign) => (
+                {filteredCampaigns?.map((campaign) => (
                   <Link
                     key={campaign._id}
                     href={`/campaigns/${campaign._id}`}

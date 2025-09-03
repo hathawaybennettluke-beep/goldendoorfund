@@ -7,6 +7,7 @@ import { Navbar } from "@/components/Navbar";
 import { UserSyncProvider } from "@/components/UserSyncProvider";
 import { UserSyncStatus } from "@/components/UserSyncStatus";
 import { Target, AlertTriangle, BookOpen, Heart } from "lucide-react";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -141,6 +142,12 @@ export default function RootLayout({
               />
               {children}
               {/* <UserSyncStatus /> */}
+              <Toaster 
+                position="top-right"
+                expand={false}
+                richColors
+                closeButton
+              />
             </UserSyncProvider>
           </ConvexClientProvider>
         </ClerkProvider>
