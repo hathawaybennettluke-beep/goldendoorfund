@@ -254,7 +254,7 @@ export default function CampaignsManagement() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Categories</SelectItem>
-                    {categories?.map((category) => (
+                    {categories?.filter((categories) => categories.trim() !== "")?.map((category) => (
                       <SelectItem key={category} value={category}>
                         {category}
                       </SelectItem>

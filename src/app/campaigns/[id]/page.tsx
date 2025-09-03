@@ -31,6 +31,7 @@ import { useParams, useSearchParams } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import DonationForm from "@/components/DonationForm"; // We'll create this component
 import Image from "next/image";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 // Load Stripe
 const stripePromise = loadStripe(
@@ -405,7 +406,9 @@ export default function CampaignDetailPage() {
                         </label>
                       </div>
 
-                      <Button
+                      <Tooltip >
+                      <TooltipTrigger>
+                          <Button
                         className="w-full"
                         size="lg"
                         disabled={!donationAmount || !user}
@@ -414,6 +417,19 @@ export default function CampaignDetailPage() {
                         <Heart className="h-4 w-4 mr-2" />
                         {`Continue to Payment ${donationAmount ? `($${donationAmount})` : ""}`}
                       </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>
+                          {!user 
+                            ? "Please login first to donate"
+                            : !donationAmount
+                              ? "Please select or enter a donation amount" 
+                              : isAnonymous
+                                ? "Your donation will be anonymous"
+                                : "Your donation will be attributed to your name"}
+                        </p>
+                      </TooltipContent>
+                      </Tooltip>
                     </>
                   ) : (
                     <>
