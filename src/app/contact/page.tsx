@@ -391,7 +391,7 @@ export default function ContactPage() {
                   <div className="p-4 rounded-lg bg-green-50 border border-green-200 flex items-center gap-3 mb-4">
                     <CheckCircle className="h-5 w-5 text-green-600" />
                     <p className="text-green-800 font-medium">
-                      Thank you! Your message has been sent successfully. We'll get back to you soon.
+                      Thank you! Your message has been sent successfully. We&apos;ll get back to you soon.
                     </p>
                   </div>
                 )}
