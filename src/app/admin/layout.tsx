@@ -43,6 +43,7 @@ import {
 import Image from "next/image";
 import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -96,13 +97,17 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     return pathname.startsWith(href);
   };
 
+  useEffect(() => {
+    if (currentUser && currentUser?.role !== "admin") {
+      router.push("/");
+    }
+  }, [currentUser, router]);
+
   if (currentUser === undefined) {
     return <div>Loading...</div>;
   }
 
-  if (currentUser?.role !== "admin") {
-    router.push("/");
-  }
+
 
   return (
     <SidebarProvider>
