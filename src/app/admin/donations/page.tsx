@@ -261,6 +261,54 @@ export default function DonationsManagement() {
     }
   };
 
+  // Export donations to CSV
+  const exportDonationsToCSV = (donations: DonationWithDetails[]) => {
+    if (!donations.length) return;
+
+    const headers = [
+      'Donor Name',
+      'Donor Email',
+      'Campaign',
+      'Organization',
+      'Category',
+      'Amount',
+      'Status',
+      'Message',
+      'Anonymous',
+      'Date',
+      'Payment Intent ID'
+    ];
+
+    const csvData = donations.map(donation => [
+      donation.isAnonymous ? 'Anonymous' : (donation.donor?.name || 'Unknown'),
+      donation.isAnonymous ? 'N/A' : (donation.donor?.email || 'Unknown'),
+      donation.campaign?.title || 'Unknown Campaign',
+      donation.campaign?.organization || 'Unknown',
+      donation.campaign?.category || 'Unknown',
+      formatCurrency(donation.amount),
+      donation.status,
+      donation.message || 'No message',
+      donation.isAnonymous ? 'Yes' : 'No',
+      formatDate(donation.createdAt),
+      donation.stripePaymentIntentId || 'N/A'
+    ]);
+
+    const csvContent = [
+      headers.join(','),
+      ...csvData.map(row => row.map(cell => `"${cell}"`).join(','))
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `donations-${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   // Loading state
   if (!donationStats || !donationsResult) {
     return (
@@ -294,7 +342,11 @@ export default function DonationsManagement() {
           </p>
         </div>
         <div className="flex gap-3">
-          <Button variant="outline">
+          <Button 
+            variant="outline" 
+            onClick={() => exportDonationsToCSV(filteredAndSortedDonations)}
+            disabled={!filteredAndSortedDonations.length}
+          >
             <Download className="mr-2 h-4 w-4" />
             Export
           </Button>

@@ -220,10 +220,6 @@ export default function BlogManagement() {
           </p>
         </div>
         <div className="flex gap-3">
-          <Button variant="outline">
-            <Calendar className="mr-2 h-4 w-4" />
-            Schedule Post
-          </Button>
           <Button asChild>
             <Link href="/admin/blog/new">
               <Plus className="mr-2 h-4 w-4" />
