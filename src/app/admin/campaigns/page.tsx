@@ -174,19 +174,22 @@ export default function CampaignsManagement() {
             </SelectContent>
           </Select>
 
-          <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+          { categories && (
+              <Select value={categoryFilter} onValueChange={setCategoryFilter}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Category" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Categories</SelectItem>
-              {categories.map((category) => (
+              {categories?.filter((categories) => categories.trim() !== "")?.map((category) => (
                 <SelectItem key={category} value={category}>
                   {category}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
+            )
+          }
 
           <Select value={urgencyFilter} onValueChange={setUrgencyFilter}>
             <SelectTrigger className="w-[140px]">
