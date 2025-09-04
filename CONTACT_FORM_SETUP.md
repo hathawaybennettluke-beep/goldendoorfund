@@ -12,7 +12,7 @@ The contact form system includes:
 
 ## Prerequisites
 
-1. **Google Workspace Account**: You need access to `contact@goldendoorfund.org`
+1. **Google Workspace Account**: You need access to `goldendoor@goldendoorfund.org`
 2. **Gmail App Password**: Required for SMTP authentication
 3. **Convex Project**: Your Convex backend should be set up
 4. **Next.js Project**: Your frontend application
@@ -51,11 +51,11 @@ Add these variables to your Convex dashboard:
 
 ```bash
 # Gmail SMTP Configuration
-GMAIL_USER=contact@goldendoorfund.org
+GMAIL_USER=goldendoor@goldendoorfund.org
 GMAIL_APP_PASSWORD=your_16_character_app_password_here
 
 # Contact Email (where notifications are sent)
-CONTACT_EMAIL=contact@goldendoorfund.org
+CONTACT_EMAIL=goldendoor@goldendoorfund.org
 ```
 
 ### Next.js Environment Variables (Optional)
@@ -113,7 +113,7 @@ npm run dev
 4. Verify:
    - Form shows loading state
    - Success message appears
-   - Email is received at `contact@goldendoorfund.org`
+   - Email is received at `goldendoor@goldendoorfund.org`
    - Submission is stored in Convex database
 
 ### 3. Check Convex Dashboard

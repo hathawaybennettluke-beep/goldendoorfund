@@ -21,6 +21,15 @@ const createTransporter = () => {
 
 // Email template function
 const createEmailTemplate = (name: string, email: string, message: string) => {
+  // Parse message to extract subject and category
+  const messageLines = message.split('\n');
+  const subjectLine = messageLines.find(line => line.startsWith('Subject:'));
+  const categoryLine = messageLines.find(line => line.startsWith('Category:'));
+  const actualMessage = messageLines.filter(line => !line.startsWith('Subject:') && !line.startsWith('Category:') && !line.startsWith('Message:')).join('\n').trim();
+  
+  const subject = subjectLine ? subjectLine.replace('Subject:', '').trim() : 'No subject';
+  const category = categoryLine ? categoryLine.replace('Category:', '').trim() : 'General';
+  
   return {
     subject: `New Contact Form Submission - ${name}`,
     html: `
@@ -28,52 +37,206 @@ const createEmailTemplate = (name: string, email: string, message: string) => {
       <html>
       <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>New Contact Form Submission</title>
         <style>
-          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
-          .content { background: #fff; padding: 20px; border: 1px solid #e9ecef; border-radius: 8px; }
-          .field { margin-bottom: 15px; }
-          .label { font-weight: bold; color: #495057; }
-          .value { margin-top: 5px; padding: 10px; background: #f8f9fa; border-radius: 4px; }
-          .message-box { background: #fff; border: 1px solid #dee2e6; padding: 15px; border-radius: 4px; }
+          * { margin: 0; padding: 0; box-sizing: border-box; }
+          body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; 
+            line-height: 1.6; 
+            color: #1a1a1a; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+          }
+          .container { 
+            max-width: 600px; 
+            margin: 0 auto; 
+            background: #ffffff; 
+            border-radius: 16px; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+          }
+          .header { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+          }
+          .header h1 { 
+            font-size: 28px; 
+            font-weight: 700; 
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+          }
+          .header p { 
+            font-size: 16px; 
+            opacity: 0.9;
+            font-weight: 400;
+          }
+          .content { 
+            padding: 40px 30px; 
+          }
+          .field { 
+            margin-bottom: 24px; 
+          }
+          .field:last-child { 
+            margin-bottom: 0; 
+          }
+          .label { 
+            font-weight: 600; 
+            color: #374151; 
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+          }
+          .value { 
+            padding: 16px; 
+            background: #f8fafc; 
+            border-radius: 8px; 
+            border-left: 4px solid #667eea;
+            font-size: 16px;
+            color: #1f2937;
+          }
+          .email-value { 
+            padding: 16px; 
+            background: #f8fafc; 
+            border-radius: 8px; 
+            border-left: 4px solid #667eea;
+            font-size: 16px;
+          }
+          .email-value a { 
+            color: #667eea; 
+            text-decoration: none; 
+            font-weight: 500;
+          }
+          .email-value a:hover { 
+            text-decoration: underline; 
+          }
+          .message-box { 
+            background: #f8fafc; 
+            border: 1px solid #e5e7eb; 
+            padding: 20px; 
+            border-radius: 8px; 
+            border-left: 4px solid #667eea;
+            font-size: 16px;
+            line-height: 1.7;
+            color: #374151;
+            white-space: pre-wrap;
+          }
+          .category-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+          }
+          .footer { 
+            background: #f8fafc; 
+            padding: 30px; 
+            text-align: center; 
+            border-top: 1px solid #e5e7eb;
+          }
+          .footer p { 
+            color: #6b7280; 
+            font-size: 14px;
+          }
+          .logo { 
+            font-size: 24px; 
+            font-weight: 700; 
+            color: white;
+            margin-bottom: 16px;
+          }
+          @media (max-width: 600px) {
+            body { padding: 10px; }
+            .header { padding: 30px 20px; }
+            .content { padding: 30px 20px; }
+            .footer { padding: 20px; }
+          }
         </style>
       </head>
       <body>
         <div class="container">
           <div class="header">
-            <h2>New Contact Form Submission</h2>
-            <p>You have received a new message through your website contact form.</p>
+            <div class="logo">Golden Door Fund</div>
+            <h1>New Contact Form Submission</h1>
+            <p>You have received a new message through your website contact form</p>
           </div>
           <div class="content">
             <div class="field">
-              <div class="label">Name:</div>
+              <div class="label">Name</div>
               <div class="value">${name}</div>
             </div>
             <div class="field">
-              <div class="label">Email:</div>
-              <div class="value">${email}</div>
+              <div class="label">Email</div>
+              <div class="email-value">
+                <a href="mailto:${email}">${email}</a>
+              </div>
             </div>
             <div class="field">
-              <div class="label">Message:</div>
-              <div class="message-box">${message.replace(/\n/g, '<br>')}</div>
+              <div class="label">Category</div>
+              <div class="value">
+                <span class="category-badge">${category}</span>
+              </div>
             </div>
             <div class="field">
-              <div class="label">Submitted:</div>
-              <div class="value">${new Date().toLocaleString()}</div>
+              <div class="label">Subject</div>
+              <div class="value">${subject}</div>
             </div>
+            <div class="field">
+              <div class="label">Message</div>
+              <div class="message-box">${actualMessage.replace(/\n/g, '<br>')}</div>
+            </div>
+            <div class="field">
+              <div class="label">Submitted</div>
+              <div class="value">${new Date().toLocaleString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric', 
+                hour: '2-digit', 
+                minute: '2-digit',
+                timeZoneName: 'short'
+              })}</div>
+            </div>
+          </div>
+          <div class="footer">
+            <p>This email was sent from your Golden Door Fund contact form</p>
+            <p>Reply directly to this email to respond to ${name}</p>
           </div>
         </div>
       </body>
       </html>
     `,
     text: `
-      New Contact Form Submission
+      Golden Door Fund - New Contact Form Submission
+      ================================================
+      
+      You have received a new message through your website contact form.
       
       Name: ${name}
       Email: ${email}
-      Message: ${message}
-      Submitted: ${new Date().toLocaleString()}
+      Category: ${category}
+      Subject: ${subject}
+      
+      Message:
+      ${actualMessage}
+      
+      Submitted: ${new Date().toLocaleString('en-US', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric', 
+        hour: '2-digit', 
+        minute: '2-digit',
+        timeZoneName: 'short'
+      })}
+      
+      ---
+      Reply directly to this email to respond to ${name}
+      This email was sent from your Golden Door Fund contact form
     `
   };
 };
@@ -145,9 +308,15 @@ export const submitContactForm = action({
         throw new Error(`Validation failed: ${validationErrors.join(', ')}`);
       }
       
+      // Check for required environment variables (temporarily disabled)
+      if (!process.env.GMAIL_USER) {
+        console.error('Missing Gmail user environment variable');
+        throw new Error('Email service is not properly configured');
+      }
+      
       // Check for required environment variables
-      if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
-        console.error('Missing Gmail configuration environment variables');
+      if (!process.env.GMAIL_APP_PASSWORD) {
+        console.error('Missing Gmail app password environment variable');
         throw new Error('Email service is not properly configured');
       }
       
@@ -170,7 +339,7 @@ export const submitContactForm = action({
         
         const mailOptions = {
           from: `"Golden Door Fund Contact" <${process.env.GMAIL_USER}>`,
-          to: process.env.CONTACT_EMAIL || process.env.GMAIL_USER,
+          to: process.env.CONTACT_EMAIL || "goldendoor@goldendoorfund.org",
           replyTo: sanitizedEmail,
           subject: emailTemplate.subject,
           html: emailTemplate.html,
