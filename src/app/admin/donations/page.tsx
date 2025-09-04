@@ -290,7 +290,7 @@ export default function DonationsManagement() {
       donation.message || 'No message',
       donation.isAnonymous ? 'Yes' : 'No',
       formatDate(donation.createdAt),
-      donation.stripePaymentIntentId || 'N/A'
+      'N/A' // stripePaymentIntentId not available in current type
     ]);
 
     const csvContent = [

@@ -3,6 +3,7 @@
 import { useParams, useRouter } from "next/navigation";
 import { useQuery } from "convex/react";
 import { api } from "../../../../../convex/_generated/api";
+import { Id } from "../../../../../convex/_generated/dataModel";
 import {
   ArrowLeft,
   User,
@@ -10,15 +11,10 @@ import {
   Calendar,
   DollarSign,
   Target,
-  Activity,
   MapPin,
   Phone,
   FileText,
-  Users,
-  TrendingUp,
-  Clock,
   Heart,
-  Eye,
   Edit,
   Trash2,
   MoreHorizontal,
@@ -55,7 +51,7 @@ import Image from "next/image";
 export default function UserDetails() {
   const params = useParams();
   const router = useRouter();
-  const userId = params.id as string;
+  const userId = params.id as Id<"users">;
 
   // Fetch user details
   const userDetails = useQuery(api.users.getUserById, { userId });
@@ -79,25 +75,14 @@ export default function UserDetails() {
     });
   };
 
-  const getTimeAgo = (timestamp: number) => {
-    const now = Date.now();
-    const diffInMs = now - timestamp;
-    const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
 
-    if (diffInDays === 0) return "Today";
-    if (diffInDays === 1) return "Yesterday";
-    if (diffInDays < 7) return `${diffInDays} days ago`;
-    if (diffInDays < 30) return `${Math.floor(diffInDays / 7)} weeks ago`;
-    if (diffInDays < 365) return `${Math.floor(diffInDays / 30)} months ago`;
-    return `${Math.floor(diffInDays / 365)} years ago`;
-  };
 
-  const getUserStatus = (user: any) => {
+  const getUserStatus = (user: { donations?: Array<{ createdAt: number }> }) => {
     if (!user.donations || user.donations.length === 0) {
       return { status: "inactive", color: "bg-gray-100 text-gray-800" };
     }
     
-    const lastDonation = Math.max(...user.donations.map((d: any) => d.createdAt));
+    const lastDonation = Math.max(...user.donations.map((d: { createdAt: number }) => d.createdAt));
     if (Date.now() - lastDonation < 30 * 24 * 60 * 60 * 1000) {
       return { status: "active", color: "bg-green-100 text-green-800" };
     }
@@ -196,7 +181,7 @@ export default function UserDetails() {
               <CardDescription>
                 ID: {userDetails._id.slice(-8)}
               </CardDescription>
-              <Badge className={userStatus.color} className="w-fit mx-auto mt-2">
+                             <Badge className={`${userStatus.color} w-fit mx-auto mt-2`}>
                 {userStatus.status}
               </Badge>
             </CardHeader>
@@ -320,7 +305,7 @@ export default function UserDetails() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {userDetails.donations.map((donation: any) => (
+                                 {userDetails.donations.map((donation) => (
                   <TableRow key={donation._id}>
                     <TableCell>
                       <div>
@@ -328,7 +313,7 @@ export default function UserDetails() {
                           {donation.campaign?.title || "Unknown Campaign"}
                         </div>
                         <div className="text-xs text-muted-foreground">
-                          {donation.campaign?.organization || "Unknown"}
+                          {donation.campaign?.category || "Unknown"}
                         </div>
                       </div>
                     </TableCell>
@@ -382,7 +367,7 @@ export default function UserDetails() {
               <Heart className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
               <h3 className="text-lg font-medium mb-2">No donations yet</h3>
               <p className="text-muted-foreground">
-                This user hasn't made any donations yet.
+                                 This user hasn&apos;t made any donations yet.
               </p>
             </div>
           )}

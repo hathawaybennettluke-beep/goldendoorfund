@@ -117,7 +117,7 @@ export default function CampaignsManagement() {
   };
 
   // Export campaigns to CSV
-  const exportCampaignsToCSV = (campaigns: any[]) => {
+  const exportCampaignsToCSV = (campaigns: Array<{ title: string; organization: string; category: string; status: string; urgency: string; goalAmount: number; currentAmount: number; location: string; startDate: number; endDate: number; featured: boolean; createdAt: number }>) => {
     if (!campaigns.length) return;
 
     const headers = [
