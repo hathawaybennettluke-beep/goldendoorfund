@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import {
   Users,
   Search,
@@ -45,6 +46,7 @@ import { api } from "../../../../convex/_generated/api";
 import Image from "next/image";
 
 export default function UsersManagement() {
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
 
   // Fetch all users from Convex
@@ -326,7 +328,9 @@ export default function UsersManagement() {
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => router.push(`/admin/users/${user._id}`)}
+                        >
                           <Eye className="mr-2 h-4 w-4" />
                           View Details
                         </DropdownMenuItem>

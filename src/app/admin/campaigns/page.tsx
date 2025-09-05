@@ -116,6 +116,58 @@ export default function CampaignsManagement() {
     }
   };
 
+  // Export campaigns to CSV
+  const exportCampaignsToCSV = (campaigns: Array<{ title: string; organization: string; category: string; status: string; urgency: string; goalAmount: number; currentAmount: number; location: string; startDate: number; endDate: number; featured: boolean; createdAt: number }>) => {
+    if (!campaigns.length) return;
+
+    const headers = [
+      'Campaign Name',
+      'Organization',
+      'Category',
+      'Status',
+      'Urgency',
+      'Goal Amount',
+      'Current Amount',
+      'Progress %',
+      'Location',
+      'Start Date',
+      'End Date',
+      'Featured',
+      'Created Date'
+    ];
+
+    const csvData = campaigns.map(campaign => [
+      campaign.title,
+      campaign.organization,
+      campaign.category,
+      campaign.status,
+      campaign.urgency,
+      formatCurrency(campaign.goalAmount),
+      formatCurrency(campaign.currentAmount),
+      `${Math.round(getProgressPercentage(campaign.currentAmount, campaign.goalAmount))}%`,
+      campaign.location,
+      new Date(campaign.startDate).toLocaleDateString(),
+      new Date(campaign.endDate).toLocaleDateString(),
+      campaign.featured ? 'Yes' : 'No',
+      new Date(campaign.createdAt).toLocaleDateString()
+    ]);
+
+    const csvContent = [
+      headers.join(','),
+      ...csvData.map(row => row.map(cell => `"${cell}"`).join(','))
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `campaigns-${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   // Filter campaigns (filtering is now handled by Convex query)
   const filteredCampaigns = campaigns || [];
 
@@ -138,7 +190,11 @@ export default function CampaignsManagement() {
           </p>
         </div>
         <div className="flex gap-3">
-          <Button variant="outline">
+          <Button 
+            variant="outline" 
+            onClick={() => exportCampaignsToCSV(filteredCampaigns)}
+            disabled={!filteredCampaigns.length}
+          >
             <Download className="mr-2 h-4 w-4" />
             Export
           </Button>
