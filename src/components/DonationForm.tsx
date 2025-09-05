@@ -1,9 +1,9 @@
+import { useState } from "react";
 import {
   useElements,
   useStripe,
   PaymentElement,
 } from "@stripe/react-stripe-js";
-import { usePayment } from "@/hooks/usePayment";
 import { Button } from "@/components/ui/button";
 import { Heart } from "lucide-react";
 import { Id } from "../../convex/_generated/dataModel";
@@ -14,6 +14,11 @@ interface DonationFormProps {
   donorId: Id<"users">;
   message?: string;
   isAnonymous: boolean;
+  paymentIntentData: {
+    clientSecret: string;
+    donationId: Id<"donations">;
+    paymentIntentId: string;
+  };
   onSuccess: () => void;
   onError: (error: string) => void;
 }
@@ -21,15 +26,13 @@ interface DonationFormProps {
 export default function DonationForm({
   amount,
   campaignId,
-  donorId,
-  message,
-  isAnonymous,
+  paymentIntentData,
   onSuccess,
   onError,
 }: DonationFormProps) {
   const stripe = useStripe();
   const elements = useElements();
-  const { processDonation, isProcessing } = usePayment();
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,24 +42,33 @@ export default function DonationForm({
       return;
     }
 
+    setIsProcessing(true);
+
     try {
-      const result = await processDonation({
-        amount,
-        campaignId,
-        donorId,
-        message,
-        isAnonymous,
+      // Submit the form data to Stripe
+      const { error: submitError } = await elements.submit();
+      if (submitError) {
+        throw new Error(submitError.message || "Form validation failed");
+      }
+
+      // Confirm the payment with the existing payment intent
+      const { error: stripeError } = await stripe.confirmPayment({
         elements,
-        stripe,
+        clientSecret: paymentIntentData.clientSecret,
+        confirmParams: {
+          return_url: `${window.location.origin}/campaigns/${campaignId}?payment=success&donationId=${paymentIntentData.donationId}`,
+        },
       });
 
-      if (result.success) {
-        onSuccess();
-      } else {
-        onError(result.error || "Payment failed");
+      if (stripeError) {
+        throw new Error(stripeError.message || "Payment failed");
       }
+
+      onSuccess();
     } catch (error) {
       onError(error instanceof Error ? error.message : "Payment failed");
+    } finally {
+      setIsProcessing(false);
     }
   };
 

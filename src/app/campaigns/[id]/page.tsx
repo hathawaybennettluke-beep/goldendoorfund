@@ -1,11 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useQuery } from "convex/react";
+import { useQuery, useAction } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { Id } from "../../../../convex/_generated/dataModel";
 import { useUser } from "@clerk/nextjs";
-import { usePayment } from "@/hooks/usePayment";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import {
@@ -17,7 +16,6 @@ import {
   Target,
   Clock,
   Shield,
-  CheckCircle,
   ArrowLeft,
   DollarSign,
   AlertCircle,
@@ -31,7 +29,11 @@ import { useParams, useSearchParams } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import DonationForm from "@/components/DonationForm"; // We'll create this component
 import Image from "next/image";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 // Load Stripe
 const stripePromise = loadStripe(
@@ -57,6 +59,15 @@ export default function CampaignDetailPage() {
   const [donationMessage, setDonationMessage] = useState("");
   const [isAnonymous, setIsAnonymous] = useState(false);
   const [showPaymentForm, setShowPaymentForm] = useState(false);
+  const [paymentIntentData, setPaymentIntentData] = useState<{
+    clientSecret: string;
+    donationId: Id<"donations">;
+    paymentIntentId: string;
+  } | null>(null);
+  const [isCreatingPaymentIntent, setIsCreatingPaymentIntent] = useState(false);
+
+  // Actions
+  const createPaymentIntent = useAction(api.payments.createPaymentIntent);
 
   // Fetch campaign data from Convex
   const campaign = useQuery(api.campaigns.get, {
@@ -83,6 +94,7 @@ export default function CampaignDetailPage() {
       setDonationMessage("");
       setIsAnonymous(false);
       setShowPaymentForm(false);
+      setPaymentIntentData(null);
     } else if (paymentStatus === "canceled") {
       toast({
         title: "Donation Canceled",
@@ -143,7 +155,7 @@ export default function CampaignDetailPage() {
 
   const predefinedAmounts = [25, 50, 100, 250, 500];
 
-  const handleDonateClick = () => {
+  const handleDonateClick = async () => {
     if (!user) {
       toast({
         title: "Please Sign In",
@@ -163,7 +175,37 @@ export default function CampaignDetailPage() {
       return;
     }
 
-    setShowPaymentForm(true);
+    // Create payment intent when transitioning to payment form
+    setIsCreatingPaymentIntent(true);
+    try {
+      const paymentData = await createPaymentIntent({
+        amount: amount,
+        campaignId: campaignId as Id<"campaigns">,
+        donorClerkId: user.id,
+        message: donationMessage || undefined,
+        isAnonymous: isAnonymous,
+      });
+
+      if (!paymentData.clientSecret) {
+        throw new Error("Failed to create payment intent");
+      }
+
+      setPaymentIntentData({
+        clientSecret: paymentData.clientSecret,
+        donationId: paymentData.donationId,
+        paymentIntentId: paymentData.paymentIntentId,
+      });
+      setShowPaymentForm(true);
+    } catch (error) {
+      toast({
+        title: "Payment Setup Failed",
+        description:
+          error instanceof Error ? error.message : "Failed to set up payment",
+        type: "error",
+      });
+    } finally {
+      setIsCreatingPaymentIntent(false);
+    }
   };
 
   return (
@@ -407,28 +449,34 @@ export default function CampaignDetailPage() {
                       </div>
 
                       <Tooltip>
-                      <TooltipTrigger className="w-full">
+                        <TooltipTrigger className="w-full">
                           <Button
-                        className="w-full"
-                        size="lg"
-                        disabled={!donationAmount || !user}
-                        onClick={handleDonateClick}
-                      >
-                        <Heart className="h-4 w-4 mr-2" />
-                        {`Continue to Payment ${donationAmount ? `($${donationAmount})` : ""}`}
-                      </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>
-                          {!user 
-                            ? "Please login first to donate"
-                            : !donationAmount
-                              ? "Please select or enter a donation amount" 
-                              : isAnonymous
-                                ? "Your donation will be anonymous"
-                                : "Your donation will be attributed to your name"}
-                        </p>
-                      </TooltipContent>
+                            className="w-full"
+                            size="lg"
+                            disabled={
+                              !donationAmount ||
+                              !user ||
+                              isCreatingPaymentIntent
+                            }
+                            onClick={handleDonateClick}
+                          >
+                            <Heart className="h-4 w-4 mr-2" />
+                            {isCreatingPaymentIntent
+                              ? "Setting up payment..."
+                              : `Continue to Payment ${donationAmount ? `($${donationAmount})` : ""}`}
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>
+                            {!user
+                              ? "Please login first to donate"
+                              : !donationAmount
+                                ? "Please select or enter a donation amount"
+                                : isAnonymous
+                                  ? "Your donation will be anonymous"
+                                  : "Your donation will be attributed to your name"}
+                          </p>
+                        </TooltipContent>
                       </Tooltip>
                     </>
                   ) : (
@@ -440,7 +488,10 @@ export default function CampaignDetailPage() {
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => setShowPaymentForm(false)}
+                            onClick={() => {
+                              setShowPaymentForm(false);
+                              setPaymentIntentData(null);
+                            }}
                           >
                             ← Back
                           </Button>
@@ -465,39 +516,46 @@ export default function CampaignDetailPage() {
                         </div>
                       </div>
 
-                      <Elements
-                        stripe={stripePromise}
-                        options={{
-                          mode: "payment",
-                          amount: Math.round(parseFloat(donationAmount) * 100),
-                          currency: "usd",
-                          appearance: {
-                            theme: "stripe",
-                          },
-                        }}
-                      >
-                        <DonationForm
-                          amount={parseFloat(donationAmount)}
-                          campaignId={campaignId as Id<"campaigns">}
-                          donorId={user?.id as Id<"users">}
-                          message={donationMessage || undefined}
-                          isAnonymous={isAnonymous}
-                          onSuccess={() => {
-                            toast({
-                              title: "Payment Processing",
-                              description: "Your payment is being processed...",
-                              type: "success",
-                            });
+                      {paymentIntentData ? (
+                        <Elements
+                          stripe={stripePromise}
+                          options={{
+                            clientSecret: paymentIntentData.clientSecret,
+                            appearance: {
+                              theme: "stripe",
+                            },
                           }}
-                          onError={(error: string) => {
-                            toast({
-                              title: "Payment Failed",
-                              description: error,
-                              type: "error",
-                            });
-                          }}
-                        />
-                      </Elements>
+                        >
+                          <DonationForm
+                            amount={parseFloat(donationAmount)}
+                            campaignId={campaignId as Id<"campaigns">}
+                            donorId={user?.id as Id<"users">}
+                            message={donationMessage || undefined}
+                            isAnonymous={isAnonymous}
+                            paymentIntentData={paymentIntentData}
+                            onSuccess={() => {
+                              toast({
+                                title: "Payment Processing",
+                                description:
+                                  "Your payment is being processed...",
+                                type: "success",
+                              });
+                            }}
+                            onError={(error: string) => {
+                              toast({
+                                title: "Payment Failed",
+                                description: error,
+                                type: "error",
+                              });
+                            }}
+                          />
+                        </Elements>
+                      ) : (
+                        <div className="flex items-center justify-center py-8">
+                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                          <span className="ml-2">Setting up payment...</span>
+                        </div>
+                      )}
                     </>
                   )}
 
