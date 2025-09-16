@@ -72,7 +72,7 @@ export default function PrivacyPage() {
             {/* Introduction */}
             <div className="mb-8">
               <p className="text-muted-foreground leading-relaxed">
-                Golden Door Fund ("we," "our," or "us") values your privacy and is committed to 
+                Golden Door Fund (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) values your privacy and is committed to 
                 protecting your personal information. This Privacy Policy explains how we collect, use, and 
                 safeguard the information you provide when you use golendoorfund.org.
               </p>
@@ -200,7 +200,7 @@ export default function PrivacyPage() {
               <div className="group">
                 <h2 className="text-xl sm:text-2xl font-bold mb-4 flex items-center gap-2 group-hover:text-primary transition-colors duration-300">
                   <span className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-primary/10 text-primary">8</span>
-                  Children's Privacy
+                  Children&apos;s Privacy
                 </h2>
                 <div className="pl-10 border-l-2 border-muted/50 group-hover:border-primary/30 transition-colors duration-300">
                   <p className="text-muted-foreground">

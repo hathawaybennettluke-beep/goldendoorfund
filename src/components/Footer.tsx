@@ -1,7 +1,8 @@
 import React from "react";
-import { FaFacebook, FaInstagram, FaLinkedin, FaTwitter, FaYoutube, FaDiscord, FaTiktok } from "react-icons/fa";
-import { Heart, Globe, Shield, Mail, Phone, MapPin, ArrowUp, Sparkles } from "lucide-react";
+import { FaFacebook, FaInstagram, FaLinkedin, FaTwitter, FaTiktok } from "react-icons/fa";
+import { Mail, Phone, ArrowUp, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 interface FooterProps {
   logo?: {
@@ -116,11 +117,14 @@ const Footer = ({
             <div className="space-y-3 sm:space-y-4">
               <div className="flex items-center">
                 <a href={logo.url} className="group">
-                  <img
+                  <Image
                     src={logo.src}
                     alt={logo.alt}
                     title={logo.title}
+                    width={128}
+                    height={128}
                     className="h-20 w-auto sm:h-32 group-hover:scale-105 transition-transform duration-300"
+                    unoptimized
                   />
                 </a>
               </div>

@@ -71,7 +71,7 @@ export default function CookiePolicyPage() {
             {/* Introduction */}
             <div className="mb-8">
               <p className="text-muted-foreground leading-relaxed">
-                Golden Door Fund ("we," "our," or "us") uses cookies and similar technologies on 
+                Golden Door Fund (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) uses cookies and similar technologies on 
                 golendoorfund.org to improve your experience, analyze website traffic, and support the 
                 functionality of our services. This Cookie Policy explains what cookies are, how we use 
                 them, and how you can manage your preferences.
