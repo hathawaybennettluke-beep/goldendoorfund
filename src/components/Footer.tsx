@@ -1,5 +1,5 @@
 import React from "react";
-import { FaFacebook, FaInstagram, FaLinkedin, FaTwitter, FaYoutube, FaDiscord } from "react-icons/fa";
+import { FaFacebook, FaInstagram, FaLinkedin, FaTwitter, FaYoutube, FaDiscord, FaTiktok } from "react-icons/fa";
 import { Heart, Globe, Shield, Mail, Phone, MapPin, ArrowUp, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -58,11 +58,11 @@ const defaultSections = [
 ];
 
 const defaultSocialLinks = [
-  { icon: <FaInstagram className="size-4" />, href: "#", label: "Instagram" },
+  { icon: <FaInstagram className="size-4" />, href: "https://www.instagram.com/goldendoorfund?igsh=cjE2YWZjeW11aGxm&utm_source=qr", label: "Instagram" },
+  { icon: <FaTiktok className="size-4" />, href: "https://www.tiktok.com/@goldendoorfund?_t=ZP-8zkxOUkNnYt&_r=1", label: "TikTok" },
   { icon: <FaFacebook className="size-4" />, href: "#", label: "Facebook" },
   { icon: <FaTwitter className="size-4" />, href: "#", label: "Twitter" },
   { icon: <FaLinkedin className="size-4" />, href: "#", label: "LinkedIn" },
-  { icon: <FaYoutube className="size-4" />, href: "#", label: "YouTube" },
 ];
 
 const defaultLegalLinks = [
