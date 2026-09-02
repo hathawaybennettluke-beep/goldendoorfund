@@ -56,12 +56,17 @@ const Navbar = ({
     signup: { title: "Sign up", url: "#" },
   },
 }: NavbarProps) => {
-  const isAdminRoute = usePathname().includes("/admin");
+  const pathname = usePathname();
+  const isAdminRoute = pathname.includes("/admin");
+  const isEcommerceRoute = pathname.startsWith("/ecommerce");
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
   if (isAdminRoute) {
     return null;
   }
+
+  // The ecommerce automation platform ships its own navigation.
+  if (isEcommerceRoute) return null;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">

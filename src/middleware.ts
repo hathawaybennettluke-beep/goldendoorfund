@@ -4,11 +4,19 @@ import { ConvexHttpClient } from "convex/browser";
 import { api } from "../convex/_generated/api";
 
 const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
+const isEcommerceDashboardRoute = createRouteMatcher(["/ecommerce/dashboard(.*)"]);
 
 const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
 export default clerkMiddleware(async (auth, req) => {
   const {  userId } = await auth();
+
+  // Ecommerce automation dashboard: any signed-in user may access their own stores.
+  if (isEcommerceDashboardRoute(req) && !userId) {
+    const signIn = new URL("/sign-in", req.url);
+    signIn.searchParams.set("redirect_url", req.nextUrl.pathname);
+    return NextResponse.redirect(signIn);
+  }
 
   // Check if user is trying to access admin routes
   if (isAdminRoute(req)) {
